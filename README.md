@@ -1,5 +1,7 @@
 # LaBGen
 
+![Screenshot](readme/graphical-abstract.png)
+
 LaBGen is a stationary background generation method that was introduced in [1] and extensively described in a journal paper under review. Note that LaBGen has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://www.scenebackgroundmodeling.net/). The purpose of this repository if twofold:
 
 1. To share the source code of the method.
@@ -49,7 +51,7 @@ $ ./LaBGen -i path_to_IBMtest2/IBMtest2_%6d.png -o my_output_path -u -a frame_di
 
 With this last option, the processing will be slower has an estimation of the stationary background is generated after each frame in the corresponding window. Here is an example of the execution of the program with the `-v` option:
 
-
+![Screenshot](readme/screenshot.png)
 
 Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`).
 
