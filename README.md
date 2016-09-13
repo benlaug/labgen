@@ -9,7 +9,7 @@ LaBGen is a patch-based stationary background generation method that was introdu
 
 ## Instructions
 
-The program has been developed in standard C++ and is distributed under the [GPLv3](LICENSE) license. In order to compile it, you need a C++ compiler, a copy of the [Boost](http://www.boost.org) library, a copy of the [OpenCV 2](http://opencv.org) library (an OpenCV 3 support is in progress), and the [CMake](https://cmake.org) build automation tool. On UNIX-like environments, the program can be compiled as follows, considering that your terminal is in the source code directory:
+The program has been developed in standard C++ and is distributed under the [GPLv3](LICENSE) license. In order to compile it, you need a C++ compiler, a copy of the [Boost](http://www.boost.org) library, a copy of the [OpenCV](http://opencv.org) library, and the [CMake](https://cmake.org) build automation tool. On UNIX-like environments, the program can be compiled as follows, considering that your terminal is in the source code directory:
 
 ```
 $ cd build
@@ -53,7 +53,7 @@ With this last option, the processing will be slower has an estimation of the st
 
 ![Screenshot](readme/screenshot.png)
 
-Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`).
+Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`) and macOS (compiler with `clang++`).
 
 ## Acknowledgments
 
