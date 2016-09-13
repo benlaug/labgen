@@ -1,3 +1,5 @@
+#include <boost/filesystem.hpp>
+
 #include "SigmaDeltaBGS.h"
 
 SigmaDeltaBGS::SigmaDeltaBGS() :
@@ -28,7 +30,9 @@ void SigmaDeltaBGS::process(
   loadConfig();
 
   if (firstTime) {
-    saveConfig();
+    if (!(boost::filesystem::exists("./config/SigmaDeltaBGS.xml")))
+      saveConfig();
+
     sdLaMa091Init_8u_C3R(algorithm, img_input.data, img_input.cols, img_input.rows, img_input.step);
 
     firstTime = false;

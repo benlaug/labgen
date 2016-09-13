@@ -14,9 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "KDE.h"
-
 #include <boost/filesystem.hpp>
+
+#include "KDE.h"
 
 KDE::KDE() : SequenceLength(50), TimeWindowSize(100), SDEstimationFlag(1), lUseColorRatiosFlag(1),
   th(10e-8), alpha(0.3), framesToLearn(10), frameNumber(0), firstTime(true), showOutput(true)

@@ -14,27 +14,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "DPZivkovicAGMMBGS.h"
+#include <boost/filesystem.hpp>
 
-DPZivkovicAGMMBGS::DPZivkovicAGMMBGS() : firstTime(true), frameNumber(0), showOutput(true), threshold(25.0f), alpha(0.001f), gaussians(3)
+#include "DPGrimsonGMMBGS.h"
+
+DPGrimsonGMMBGS::DPGrimsonGMMBGS() : firstTime(true), frameNumber(0), showOutput(true), threshold(9.0), alpha(0.01), gaussians(3)
 {
-  std::cout << "DPZivkovicAGMMBGS()" << std::endl;
+  std::cout << "DPGrimsonGMMBGS()" << std::endl;
 }
 
-DPZivkovicAGMMBGS::~DPZivkovicAGMMBGS()
+DPGrimsonGMMBGS::~DPGrimsonGMMBGS()
 {
-  std::cout << "~DPZivkovicAGMMBGS()" << std::endl;
+  std::cout << "~DPGrimsonGMMBGS()" << std::endl;
 }
 
-void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel)
+void DPGrimsonGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel)
 {
   if(img_input.empty())
     return;
 
   loadConfig();
 
-  if(firstTime)
-    saveConfig();
+  if(firstTime) {
+    if (!(boost::filesystem::exists("./config/DPGrimsonGMMBGS.xml")))
+      saveConfig();
+  }
 
   frame = new IplImage(img_input);
   
@@ -54,9 +58,10 @@ void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, c
     highThresholdMask.Ptr()->origin = IPL_ORIGIN_BL;
 
     params.SetFrameSize(width, height);
-    params.LowThreshold() = threshold; //5.0f*5.0f;
+    params.LowThreshold() = threshold; //3.0f*3.0f;
     params.HighThreshold() = 2*params.LowThreshold();	// Note: high threshold is used by post-processing 
-    params.Alpha() = alpha; //0.001f;
+    //params.Alpha() = 0.001f;
+    params.Alpha() = alpha; //0.01f;
     params.MaxModes() = gaussians; //3;
 
     bgs.Initalize(params);
@@ -70,7 +75,7 @@ void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, c
   cv::Mat foreground(highThresholdMask.Ptr());
 
   if(showOutput)
-    cv::imshow("Gaussian Mixture Model (Zivkovic)", foreground);
+    cv::imshow("GMM (Grimson)", foreground);
   
   foreground.copyTo(img_output);
 
@@ -79,9 +84,9 @@ void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, c
   frameNumber++;
 }
 
-void DPZivkovicAGMMBGS::saveConfig()
+void DPGrimsonGMMBGS::saveConfig()
 {
-  CvFileStorage* fs = cvOpenFileStorage("./config/DPZivkovicAGMMBGS.xml", 0, CV_STORAGE_WRITE);
+  CvFileStorage* fs = cvOpenFileStorage("./config/DPGrimsonGMMBGS.xml", 0, CV_STORAGE_WRITE);
 
   cvWriteReal(fs, "threshold", threshold);
   cvWriteReal(fs, "alpha", alpha);
@@ -91,12 +96,12 @@ void DPZivkovicAGMMBGS::saveConfig()
   cvReleaseFileStorage(&fs);
 }
 
-void DPZivkovicAGMMBGS::loadConfig()
+void DPGrimsonGMMBGS::loadConfig()
 {
-  CvFileStorage* fs = cvOpenFileStorage("./config/DPZivkovicAGMMBGS.xml", 0, CV_STORAGE_READ);
+  CvFileStorage* fs = cvOpenFileStorage("./config/DPGrimsonGMMBGS.xml", 0, CV_STORAGE_READ);
   
-  threshold = cvReadRealByName(fs, 0, "threshold", 25.0f);
-  alpha = cvReadRealByName(fs, 0, "alpha", 0.001f);
+  threshold = cvReadRealByName(fs, 0, "threshold", 9.0);
+  alpha = cvReadRealByName(fs, 0, "alpha", 0.01);
   gaussians = cvReadIntByName(fs, 0, "gaussians", 3);
   showOutput = cvReadIntByName(fs, 0, "showOutput", false);
 

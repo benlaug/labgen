@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <boost/filesystem.hpp>
+
 #include "DPTextureBGS.h"
 
 DPTextureBGS::DPTextureBGS() : firstTime(true), showOutput(true)
@@ -92,7 +94,9 @@ void DPTextureBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Ma
     //dilateElement = cvCreateStructuringElementEx(7, 7, 3, 3,	CV_SHAPE_RECT);
     //erodeElement = cvCreateStructuringElementEx(3, 3, 1, 1,	CV_SHAPE_RECT);
 
-    saveConfig();
+    if (!(boost::filesystem::exists("./config/DPTextureBGS.xml")))
+      saveConfig();
+
     firstTime = false;
   }
   

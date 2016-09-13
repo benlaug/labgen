@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <boost/filesystem.hpp>
+
 #include "LBAdaptiveSOM.h"
 
 LBAdaptiveSOM::LBAdaptiveSOM() : firstTime(true), showOutput(false),
@@ -39,7 +41,8 @@ void LBAdaptiveSOM::process(const cv::Mat &img_input, cv::Mat &img_output, cv::M
   
   if(firstTime)
   {
-    saveConfig();
+    if (!(boost::filesystem::exists("./config/LBAdaptiveSOM.xml")))
+      saveConfig();
 
     int w = cvGetSize(frame).width;
     int h = cvGetSize(frame).height;

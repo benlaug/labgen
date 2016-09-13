@@ -292,7 +292,7 @@ int TBackgroundVuMeter::UpdateBackground(IplImage *pSource, IplImage *pBackgroun
 
       for(c = 0; c < nbc; ++c, ptrs++, ptrb++, ptrm++)
       {
-        // recherche le bin à augmenter
+        // recherche le bin ï¿½ augmenter
         i = *ptrs / v;
         
         if(i < 0 || i >= m_nBinCount)

@@ -17,15 +17,15 @@ along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <iostream>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "../IBGS.h"
-#include "ZivkovicAGMM.h"
+#include "GrimsonGMM.h"
 
 using namespace Algorithms::BackgroundSubtraction;
 
-class DPZivkovicAGMMBGS : public IBGS
+class DPGrimsonGMMBGS : public IBGS
 {
 private:
   bool firstTime;
@@ -33,8 +33,8 @@ private:
   IplImage* frame;
   RgbImage frame_data;
 
-  ZivkovicParams params;
-  ZivkovicAGMM bgs;
+  GrimsonParams params;
+  GrimsonGMM bgs;
   BwImage lowThresholdMask;
   BwImage highThresholdMask;
 
@@ -44,8 +44,8 @@ private:
   bool showOutput;
 
 public:
-  DPZivkovicAGMMBGS();
-  ~DPZivkovicAGMMBGS();
+  DPGrimsonGMMBGS();
+  ~DPGrimsonGMMBGS();
 
   void process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel);
 

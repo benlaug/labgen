@@ -1,7 +1,7 @@
 /**
  * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
  * http://www.montefiore.ulg.ac.be/~blaugraud
- * http://www.telecom.ulg.ac.be/research/sbg
+ * http://www.telecom.ulg.ac.be/labgen
  *
  * LaBGen is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,34 +20,32 @@
 #include <cstddef>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 
-#include <boost/filesystem.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/program_options.hpp>
-#include <boost/shared_ptr.hpp>
 
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
-#include "package_bgs/IBGS.h"
-#include "package_bgs/FrameDifferenceBGS.h"
-#include "package_bgs/dp/DPGrimsonGMMBGS.h"
-#include "package_bgs/dp/DPZivkovicAGMMBGS.h"
-#include "package_bgs/dp/DPWrenGABGS.h"
-#include "package_bgs/dp/DPTextureBGS.h"
-#include "package_bgs/lb/LBAdaptiveSOM.h"
-#include "package_bgs/av/VuMeter.h"
-#include "package_bgs/ae/KDE.h"
-#include "package_bgs/bl/SigmaDeltaBGS.h"
-#include "package_bgs/pl/SuBSENSE.h"
+#include <IBGS.h>
+#include <FrameDifferenceBGS.h>
+#include <dp/DPGrimsonGMMBGS.h>
+#include <dp/DPZivkovicAGMMBGS.h>
+#include <dp/DPWrenGABGS.h>
+#include <dp/DPTextureBGS.h>
+#include <lb/LBAdaptiveSOM.h>
+#include <av/VuMeter.h>
+#include <ae/KDE.h>
+#include <bl/SigmaDeltaBGS.h>
+#include <pl/SuBSENSE.h>
 
-#include "History.hpp"
-#include "Utils.hpp"
+#include <labgen/History.hpp>
+#include <labgen/Utils.hpp>
 
+using namespace cv;
 using namespace std;
 using namespace boost;
 using namespace boost::program_options;
@@ -64,7 +62,7 @@ int main(int argc, char** argv) {
   options_description optDesc(
     string("LaBGen - Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016\n") +
     "http://www.montefiore.ulg.ac.be/~blaugraud\n"                                  +
-    "http://www.telecom.ulg.ac.be/research/sbg\n\n"                                 +
+    "http://www.telecom.ulg.ac.be/labgen\n\n"                                       +
     "Usage: LaBGen [options]"
   );
 
@@ -248,7 +246,7 @@ int main(int argc, char** argv) {
    * Reading sequence.                                                       *
    ***************************************************************************/
 
-  cv::VideoCapture decoder(sequence);
+  VideoCapture decoder(sequence);
 
   if (!decoder.isOpened())
     throw runtime_error("Cannot open the '" + sequence + "' sequence.");
@@ -261,11 +259,11 @@ int main(int argc, char** argv) {
   cout << "          height: " << height     << endl;
   cout << "           width: " << width      << endl;
 
-  typedef vector<cv::Mat>                                            FramesVec;
-  vector<cv::Mat> frames;
+  typedef vector<Mat>                                            FramesVec;
+  vector<Mat> frames;
   frames.reserve(decoder.get(CV_CAP_PROP_FRAME_COUNT));
 
-  cv::Mat frame;
+  Mat frame;
 
   while (decoder.read(frame))
     frames.push_back(frame.clone());
@@ -280,21 +278,21 @@ int main(int argc, char** argv) {
   cout << "Start processing..." << endl;
 
   /* Initialization of the background matrix. */
-  cv::Mat background = cv::Mat(height, width, CV_8UC3);
+  Mat background = Mat(height, width, CV_8UC3);
 
   /* Initialization of the ROIs. */
   Utils::ROIs rois = Utils::getROIs(height, width, nParam);
 
   /* Initialization of the segmentation map matrix. */
-  cv::Mat segmentationMap = cv::Mat(height, width, CV_8UC1);
+  Mat segmentationMap = Mat(height, width, CV_8UC1);
 
   /* Initialization of the history structure. */
-  boost::shared_ptr<PatchesHistory> history =
-    boost::make_shared<PatchesHistory>(rois, sParam);
+  std::shared_ptr<PatchesHistory> history =
+    std::make_shared<PatchesHistory>(rois, sParam);
 
   /* Misc initializations. */
-  cv::Mat fake;
-  boost::shared_ptr<IBGS> algo;
+  Mat fake;
+  std::shared_ptr<IBGS> algo;
   bool firstFrame = true;
 
   FramesVec::const_iterator begin = frames.begin();
@@ -314,25 +312,25 @@ int main(int argc, char** argv) {
       /* Algorithm instantiation. */
       if (firstFrame) {
         if (algorithm == "frame_difference")
-          algo = boost::shared_ptr<IBGS>(new FrameDifferenceBGS);
+          algo = std::shared_ptr<IBGS>(new FrameDifferenceBGS);
         else if (algorithm == "mog_grimson")
-          algo = boost::shared_ptr<IBGS>(new DPGrimsonGMMBGS);
+          algo = std::shared_ptr<IBGS>(new DPGrimsonGMMBGS);
         else if (algorithm == "mog_zivkovic")
-          algo = boost::shared_ptr<IBGS>(new DPZivkovicAGMMBGS);
+          algo = std::shared_ptr<IBGS>(new DPZivkovicAGMMBGS);
         else if (algorithm == "pfinder")
-          algo = boost::shared_ptr<IBGS>(new DPWrenGABGS);
+          algo = std::shared_ptr<IBGS>(new DPWrenGABGS);
         else if (algorithm == "lbp")
-          algo = boost::shared_ptr<IBGS>(new DPTextureBGS);
+          algo = std::shared_ptr<IBGS>(new DPTextureBGS);
         else if (algorithm == "som_adaptive")
-          algo = boost::shared_ptr<IBGS>(new LBAdaptiveSOM);
+          algo = std::shared_ptr<IBGS>(new LBAdaptiveSOM);
         else if (algorithm == "vumeter")
-          algo = boost::shared_ptr<IBGS>(new VuMeter);
+          algo = std::shared_ptr<IBGS>(new VuMeter);
         else if (algorithm == "kde")
-          algo = boost::shared_ptr<IBGS>(new KDE);
+          algo = std::shared_ptr<IBGS>(new KDE);
         else if (algorithm == "sigma_delta")
-          algo = boost::shared_ptr<IBGS>(new SigmaDeltaBGS);
+          algo = std::shared_ptr<IBGS>(new SigmaDeltaBGS);
         else if (algorithm == "subsense")
-          algo = boost::shared_ptr<IBGS>(new SuBSENSEBGS);
+          algo = std::shared_ptr<IBGS>(new SuBSENSEBGS);
         else
           throw runtime_error("The algorithm " + algorithm + " is not supported.");
       }
@@ -389,17 +387,14 @@ int main(int argc, char** argv) {
   }
 
   /* Compute background and write it. */
-  string outputFile =
-    output + "/" + "output"      + "_"   +
-    algorithm                    + "_"   +
-    lexical_cast<string>(sParam) + "_"   +
-    lexical_cast<string>(nParam) + "_"   +
-    lexical_cast<string>(pParam) + ".png";
+  stringstream outputFile;
+  outputFile << output << "/output_" << algorithm << "_" << sParam << "_" <<
+                nParam << "_" << pParam << ".png";
 
   history->median(background, sParam);
 
-  cout << "Writing " << outputFile << "..." << endl;
-  cv::imwrite(outputFile, background);
+  cout << "Writing " << outputFile.str() << "..." << endl;
+  imwrite(outputFile.str(), background);
 
   /* Cleaning. */
   if (visualization) {

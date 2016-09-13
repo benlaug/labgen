@@ -1,7 +1,7 @@
 /**
  * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
  * http://www.montefiore.ulg.ac.be/~blaugraud
- * http://www.telecom.ulg.ac.be/research/sbg
+ * http://www.telecom.ulg.ac.be/labgen
  *
  * This file is part of LaBGen.
  *
@@ -26,8 +26,7 @@
 #include <sstream>
 #include <vector>
 
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core/core.hpp>
 
 #include "Utils.hpp"
 
@@ -154,7 +153,7 @@ struct History : public HistoryInterface {
 
   /****************************************************************************/
 
-  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) {
+  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) override {
     uint32_t positives = countNonZero(segmentationMap);
 
     if (history.empty())
@@ -185,7 +184,7 @@ struct History : public HistoryInterface {
 
   /****************************************************************************/
 
-  virtual void median(cv::Mat& result, size_t size) const {
+  virtual void median(cv::Mat& result, size_t size) const override {
     if (history.size() == 1 || size == 1)
       history[0].mat.copyTo(result);
 
@@ -259,7 +258,7 @@ struct PatchesHistory : public HistoryInterface {
 
   /****************************************************************************/
 
-  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) {
+  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) override {
     for (size_t i = 0; i < rois.size(); ++i) {
       pHistory[i].insert(
         segmentationMap(rois[i]),
@@ -270,7 +269,7 @@ struct PatchesHistory : public HistoryInterface {
 
   /****************************************************************************/
 
-  virtual void median(cv::Mat& result, size_t size) const {
+  virtual void median(cv::Mat& result, size_t size) const override {
     for (size_t i = 0; i < rois.size(); ++i) {
       cv::Mat patch(
         pHistory[i].history.back().mat.rows,

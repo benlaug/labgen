@@ -1,6 +1,6 @@
 # Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
 # http://www.montefiore.ulg.ac.be/~blaugraud
-# http://www.telecom.ulg.ac.be/research/sbg
+# http://www.telecom.ulg.ac.be/labgen
 #
 # This file is part of LaBGen.
 #
@@ -16,36 +16,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with LaBGen.  If not, see <http://www.gnu.org/licenses/>.
-
-# C++ flags.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
-
-# C flags.
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
-
-file(
-  GLOB_RECURSE
-  bgs_src
-  *.cpp
-  *.cc
-  *.c
-)
-
-file(
-  GLOB_RECURSE
-  bgs_include
-  *.h
-)
-
-add_library(
-  bgs
-  SHARED
-  ${bgs_src}
-  ${bgs_include}
+add_executable(
+  LaBGen
+  LaBGen.cpp
 )
 
 target_link_libraries(
-  bgs
+  LaBGen
   ${Boost_LIBRARIES}
   ${OpenCV_LIBS}
+  bgs
 )

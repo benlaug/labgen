@@ -17,36 +17,31 @@
 # You should have received a copy of the GNU General Public License
 # along with LaBGen.  If not, see <http://www.gnu.org/licenses/>.
 
-# CMake parameter(s)
-cmake_minimum_required(VERSION 2.8)
+# C++ flags.
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 
-# Disable RPATH support for OS X
-if    (${CMAKE_MAJOR_VERSION} EQUAL 3 AND APPLE)
-  cmake_policy(SET CMP0042 OLD)
-endif ()
+file(
+  GLOB_RECURSE
+  bgs_src
+  *.cpp
+)
 
-# Project name
-project(LaBGen)
+file(
+  GLOB_RECURSE
+  bgs_include
+  *.h
+  *.i
+)
 
-# C++ flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+add_library(
+  bgs
+  STATIC
+  ${bgs_src}
+  ${bgs_include}
+)
 
-# Boost
-find_package(Boost REQUIRED program_options filesystem system)
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-
-# OpenCV
-find_package(OpenCV REQUIRED core highgui video imgproc features2d)
-include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
-
-# BGSLibrary
-add_subdirectory(bgslibrary)
-include_directories(bgslibrary)
-file(MAKE_DIRECTORY ${LaBGen_BINARY_DIR}/config)
-
-# Include directory.
-include_directories(include)
-
-# Recursion.
-add_subdirectory(include)
-add_subdirectory(main)
+target_link_libraries(
+  bgs
+  ${Boost_LIBRARIES}
+  ${OpenCV_LIBS}
+)

@@ -1,7 +1,7 @@
+#include <boost/filesystem.hpp>
+
 #include "SuBSENSE.h"
 #include "BackgroundSubtractorSuBSENSE.h"
-
-#include <boost/filesystem.hpp>
 
 SuBSENSEBGS::SuBSENSEBGS() :
 pSubsense(0), firstTime(true), showOutput(true),

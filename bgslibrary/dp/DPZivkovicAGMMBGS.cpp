@@ -14,27 +14,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "DPWrenGABGS.h"
+#include <boost/filesystem.hpp>
 
-DPWrenGABGS::DPWrenGABGS() : firstTime(true), frameNumber(0), threshold(12.25f), alpha(0.005f), learningFrames(30), showOutput(true)
+#include "DPZivkovicAGMMBGS.h"
+
+DPZivkovicAGMMBGS::DPZivkovicAGMMBGS() : firstTime(true), frameNumber(0), showOutput(true), threshold(25.0f), alpha(0.001f), gaussians(3)
 {
-  std::cout << "DPWrenGABGS()" << std::endl;
+  std::cout << "DPZivkovicAGMMBGS()" << std::endl;
 }
 
-DPWrenGABGS::~DPWrenGABGS()
+DPZivkovicAGMMBGS::~DPZivkovicAGMMBGS()
 {
-  std::cout << "~DPWrenGABGS()" << std::endl;
+  std::cout << "~DPZivkovicAGMMBGS()" << std::endl;
 }
 
-void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel)
+void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel)
 {
   if(img_input.empty())
     return;
 
   loadConfig();
 
-  if(firstTime)
-    saveConfig();
+  if(firstTime) {
+    if (!(boost::filesystem::exists("./config/DPZivkovicAGMMBGS.xml")))
+      saveConfig();
+  }
 
   frame = new IplImage(img_input);
   
@@ -54,10 +58,10 @@ void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat
     highThresholdMask.Ptr()->origin = IPL_ORIGIN_BL;
 
     params.SetFrameSize(width, height);
-    params.LowThreshold() = threshold; //3.5f*3.5f;
+    params.LowThreshold() = threshold; //5.0f*5.0f;
     params.HighThreshold() = 2*params.LowThreshold();	// Note: high threshold is used by post-processing 
-    params.Alpha() = alpha; //0.005f;
-    params.LearningFrames() = learningFrames; //30;
+    params.Alpha() = alpha; //0.001f;
+    params.MaxModes() = gaussians; //3;
 
     bgs.Initalize(params);
     bgs.InitModel(frame_data);
@@ -70,7 +74,7 @@ void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat
   cv::Mat foreground(highThresholdMask.Ptr());
 
   if(showOutput)
-    cv::imshow("Gaussian Average (Wren)", foreground);
+    cv::imshow("Gaussian Mixture Model (Zivkovic)", foreground);
   
   foreground.copyTo(img_output);
 
@@ -79,27 +83,26 @@ void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat
   frameNumber++;
 }
 
-void DPWrenGABGS::saveConfig()
+void DPZivkovicAGMMBGS::saveConfig()
 {
-  CvFileStorage* fs = cvOpenFileStorage("./config/DPWrenGABGS.xml", 0, CV_STORAGE_WRITE);
+  CvFileStorage* fs = cvOpenFileStorage("./config/DPZivkovicAGMMBGS.xml", 0, CV_STORAGE_WRITE);
 
   cvWriteReal(fs, "threshold", threshold);
   cvWriteReal(fs, "alpha", alpha);
-  cvWriteInt(fs, "learningFrames", learningFrames);
+  cvWriteInt(fs, "gaussians", gaussians);
   cvWriteInt(fs, "showOutput", showOutput);
 
   cvReleaseFileStorage(&fs);
 }
 
-void DPWrenGABGS::loadConfig()
+void DPZivkovicAGMMBGS::loadConfig()
 {
-  CvFileStorage* fs = cvOpenFileStorage("./config/DPWrenGABGS.xml", 0, CV_STORAGE_READ);
+  CvFileStorage* fs = cvOpenFileStorage("./config/DPZivkovicAGMMBGS.xml", 0, CV_STORAGE_READ);
   
-  threshold = cvReadRealByName(fs, 0, "threshold", 12.25f);
-  alpha = cvReadRealByName(fs, 0, "alpha", 0.005f);
-  learningFrames = cvReadIntByName(fs, 0, "learningFrames", 30);
+  threshold = cvReadRealByName(fs, 0, "threshold", 25.0f);
+  alpha = cvReadRealByName(fs, 0, "alpha", 0.001f);
+  gaussians = cvReadIntByName(fs, 0, "gaussians", 3);
   showOutput = cvReadIntByName(fs, 0, "showOutput", false);
 
   cvReleaseFileStorage(&fs);
 }
-

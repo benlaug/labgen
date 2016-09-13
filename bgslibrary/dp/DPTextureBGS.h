@@ -17,35 +17,40 @@ along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <iostream>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "../IBGS.h"
-#include "WrenGA.h"
+#include "TextureBGS.h"
+//#include "ConnectedComponents.h"
 
-using namespace Algorithms::BackgroundSubtraction;
-
-class DPWrenGABGS : public IBGS
+class DPTextureBGS : public IBGS
 {
 private:
   bool firstTime;
-  long frameNumber;
-  IplImage* frame;
-  RgbImage frame_data;
-
-  WrenParams params;
-  WrenGA bgs;
-  BwImage lowThresholdMask;
-  BwImage highThresholdMask;
-
-  double threshold;
-  double alpha;
-  int learningFrames;
   bool showOutput;
 
+  int width;
+  int height;
+  int size;
+  TextureBGS bgs;
+  IplImage* frame;
+  RgbImage image;
+  BwImage fgMask;
+  BwImage tempMask;
+  TextureArray* bgModel;
+  RgbImage texture;
+  unsigned char* modeArray;
+  TextureHistogram* curTextureHist;
+  //ConnectedComponents cc;
+  //CBlobResult largeBlobs;
+  //IplConvKernel* dilateElement;
+  //IplConvKernel* erodeElement;
+  //bool enableFiltering;
+
 public:
-  DPWrenGABGS();
-  ~DPWrenGABGS();
+  DPTextureBGS();
+  ~DPTextureBGS();
 
   void process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bgmodel);
 
@@ -53,4 +58,3 @@ private:
   void saveConfig();
   void loadConfig();
 };
-
