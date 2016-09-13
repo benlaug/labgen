@@ -53,7 +53,7 @@ With this last option, the processing will be slower has an estimation of the st
 
 ![Screenshot](readme/screenshot.png)
 
-Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`) and macOS (compiler with `clang++`).
+Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`) and macOS (compiled with `clang++`).
 
 ## Acknowledgments
 
