@@ -14,8 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "KDE.h"
 
 KDE::KDE() : SequenceLength(50), TimeWindowSize(100), SDEstimationFlag(1), lUseColorRatiosFlag(1),
@@ -63,10 +61,7 @@ void KDE::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &img_bg
     img_foreground = cv::Mat::zeros(rows,cols,CV_8UC1);
 
     frameNumber = 0;
-
-    if (!(boost::filesystem::exists("./config/KDE.xml")))
-      saveConfig();
-
+    saveConfig();
     firstTime = false;
   }
 

@@ -14,8 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "FrameDifferenceBGS.h"
 
 FrameDifferenceBGS::FrameDifferenceBGS() : firstTime(true), enableThreshold(true), threshold(15), showOutput(true)
@@ -35,10 +33,8 @@ void FrameDifferenceBGS::process(const cv::Mat &img_input, cv::Mat &img_output, 
 
   loadConfig();
 
-  if(firstTime) {
-    if (!(boost::filesystem::exists("./config/FrameDifferenceBGS.xml")))
-      saveConfig();
-  }
+  if(firstTime)
+    saveConfig();
 
   if(img_input_prev.empty())
   {

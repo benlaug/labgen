@@ -14,8 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "VuMeter.h"
 
 VuMeter::VuMeter() : firstTime(true), showOutput(true), enableFilter(true), binSize(8), alpha(0.995), threshold(0.03)
@@ -56,15 +54,14 @@ void VuMeter::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat &im
     mask = cvCreateImage(cvGetSize(gray),IPL_DEPTH_8U,1);
     cvZero(mask);
 
-    if (!(boost::filesystem::exists("./config/VuMeter.xml")))
-      saveConfig();
+    saveConfig();
   }
   else
     cvCvtColor(frame,gray,CV_RGB2GRAY);
   
   bgs.UpdateBackground(gray,background,mask);
-  cv::Mat img_foreground(mask);
-  cv::Mat img_bkg(background);
+  cv::Mat img_foreground = cv::cvarrToMat(mask);
+  cv::Mat img_bkg = cv::cvarrToMat(background);
 
   if(enableFilter)
   {

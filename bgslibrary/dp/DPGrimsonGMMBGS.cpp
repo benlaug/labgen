@@ -14,11 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "DPGrimsonGMMBGS.h"
 
-DPGrimsonGMMBGS::DPGrimsonGMMBGS() : firstTime(true), frameNumber(0), showOutput(true), threshold(9.0), alpha(0.01), gaussians(3)
+DPGrimsonGMMBGS::DPGrimsonGMMBGS() : firstTime(true), frameNumber(0), threshold(9.0), alpha(0.01), gaussians(3), showOutput(true) 
 {
   std::cout << "DPGrimsonGMMBGS()" << std::endl;
 }
@@ -35,10 +33,8 @@ void DPGrimsonGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv:
 
   loadConfig();
 
-  if(firstTime) {
-    if (!(boost::filesystem::exists("./config/DPGrimsonGMMBGS.xml")))
-      saveConfig();
-  }
+  if(firstTime)
+    saveConfig();
 
   frame = new IplImage(img_input);
   
@@ -72,7 +68,7 @@ void DPGrimsonGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv:
   lowThresholdMask.Clear();
   bgs.Update(frameNumber, frame_data, lowThresholdMask);
   
-  cv::Mat foreground(highThresholdMask.Ptr());
+  cv::Mat foreground = cv::cvarrToMat(highThresholdMask.Ptr());
 
   if(showOutput)
     cv::imshow("GMM (Grimson)", foreground);

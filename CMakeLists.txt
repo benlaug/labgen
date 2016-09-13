@@ -32,7 +32,7 @@ project(LaBGen)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # Boost
-find_package(Boost REQUIRED program_options filesystem system)
+find_package(Boost REQUIRED program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 # OpenCV

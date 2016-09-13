@@ -14,11 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "LBAdaptiveSOM.h"
 
-LBAdaptiveSOM::LBAdaptiveSOM() : firstTime(true), showOutput(false),
+LBAdaptiveSOM::LBAdaptiveSOM() : firstTime(true), showOutput(true), 
   sensitivity(75), trainingSensitivity(245), learningRate(62), trainingLearningRate(255), trainingSteps(55)
 {
   std::cout << "LBAdaptiveSOM()" << std::endl;
@@ -41,8 +39,7 @@ void LBAdaptiveSOM::process(const cv::Mat &img_input, cv::Mat &img_output, cv::M
   
   if(firstTime)
   {
-    if (!(boost::filesystem::exists("./config/LBAdaptiveSOM.xml")))
-      saveConfig();
+    saveConfig();
 
     int w = cvGetSize(frame).width;
     int h = cvGetSize(frame).height;
@@ -59,8 +56,8 @@ void LBAdaptiveSOM::process(const cv::Mat &img_input, cv::Mat &img_output, cv::M
 
   m_pBGModel->UpdateModel(frame);
 
-  img_foreground = cv::Mat(m_pBGModel->GetFG());
-  img_background = cv::Mat(m_pBGModel->GetBG());
+  img_foreground = cv::cvarrToMat(m_pBGModel->GetFG());
+  img_background = cv::cvarrToMat(m_pBGModel->GetBG());
     
   if(showOutput)
   {
@@ -68,8 +65,7 @@ void LBAdaptiveSOM::process(const cv::Mat &img_input, cv::Mat &img_output, cv::M
     cv::imshow("SOM Model", img_background);
   }
 
-  //img_foreground.copyTo(img_output);
-  cvtColor(img_foreground, img_output, CV_RGB2GRAY);
+  img_foreground.copyTo(img_output);
   img_background.copyTo(img_bgmodel);
   
   delete frame;

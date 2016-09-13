@@ -14,11 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "DPZivkovicAGMMBGS.h"
 
-DPZivkovicAGMMBGS::DPZivkovicAGMMBGS() : firstTime(true), frameNumber(0), showOutput(true), threshold(25.0f), alpha(0.001f), gaussians(3)
+DPZivkovicAGMMBGS::DPZivkovicAGMMBGS() : firstTime(true), frameNumber(0), threshold(25.0f), alpha(0.001f), gaussians(3), showOutput(true) 
 {
   std::cout << "DPZivkovicAGMMBGS()" << std::endl;
 }
@@ -35,10 +33,8 @@ void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, c
 
   loadConfig();
 
-  if(firstTime) {
-    if (!(boost::filesystem::exists("./config/DPZivkovicAGMMBGS.xml")))
-      saveConfig();
-  }
+  if(firstTime)
+    saveConfig();
 
   frame = new IplImage(img_input);
   
@@ -71,7 +67,7 @@ void DPZivkovicAGMMBGS::process(const cv::Mat &img_input, cv::Mat &img_output, c
   lowThresholdMask.Clear();
   bgs.Update(frameNumber, frame_data, lowThresholdMask);
   
-  cv::Mat foreground(highThresholdMask.Ptr());
+  cv::Mat foreground = cv::cvarrToMat(highThresholdMask.Ptr());
 
   if(showOutput)
     cv::imshow("Gaussian Mixture Model (Zivkovic)", foreground);

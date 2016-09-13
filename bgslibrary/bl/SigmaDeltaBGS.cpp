@@ -1,5 +1,3 @@
-#include <boost/filesystem.hpp>
-
 #include "SigmaDeltaBGS.h"
 
 SigmaDeltaBGS::SigmaDeltaBGS() :
@@ -8,7 +6,7 @@ ampFactor(1),
 minVar(15),
 maxVar(255),
 algorithm(sdLaMa091New()),
-showOutput(false) {
+showOutput(true) {
 
   applyParams();
   std::cout << "SigmaDeltaBGS()" << std::endl;
@@ -30,24 +28,27 @@ void SigmaDeltaBGS::process(
   loadConfig();
 
   if (firstTime) {
-    if (!(boost::filesystem::exists("./config/SigmaDeltaBGS.xml")))
-      saveConfig();
-
-    sdLaMa091Init_8u_C3R(algorithm, img_input.data, img_input.cols, img_input.rows, img_input.step);
+    saveConfig();
+    sdLaMa091AllocInit_8u_C3R(algorithm, img_input.data, img_input.cols, img_input.rows, img_input.step);
 
     firstTime = false;
     return;
   }
 
-  if (img_output.empty())
-    img_output = cv::Mat(img_input.rows, img_input.cols, CV_8UC1);
+  img_output = cv::Mat(img_input.rows, img_input.cols, CV_8UC1);
+  cv::Mat img_output_tmp(img_input.rows, img_input.cols, CV_8UC3);
 
-  if (img_bgmodel.empty())
-    img_bgmodel = cv::Mat(img_input.rows, img_input.cols, CV_8UC3);
+  sdLaMa091Update_8u_C3R(algorithm, img_input.data, img_output_tmp.data);
 
-  sdLaMa091Update_8u(algorithm, img_input.data);
-  sdLaMa091GetBackgroundModel(algorithm, img_bgmodel.data);
-  sdLaMa091Segmentation_8u(algorithm, img_output.data);
+  unsigned char* tmpBuffer = (unsigned char*)img_output_tmp.data;
+  unsigned char* outBuffer = (unsigned char*)img_output.data;
+
+  for (size_t i = 0; i < img_output.total(); ++i) {
+    *outBuffer = *tmpBuffer;
+
+    ++outBuffer;
+    tmpBuffer += img_output_tmp.channels();
+  }
 
   if (showOutput)
     cv::imshow("Sigma-Delta", img_output);

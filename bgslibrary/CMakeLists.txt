@@ -42,6 +42,5 @@ add_library(
 
 target_link_libraries(
   bgs
-  ${Boost_LIBRARIES}
   ${OpenCV_LIBS}
 )

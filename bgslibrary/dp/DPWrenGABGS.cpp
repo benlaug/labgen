@@ -14,8 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BGSLibrary.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <boost/filesystem.hpp>
-
 #include "DPWrenGABGS.h"
 
 DPWrenGABGS::DPWrenGABGS() : firstTime(true), frameNumber(0), threshold(12.25f), alpha(0.005f), learningFrames(30), showOutput(true)
@@ -35,10 +33,8 @@ void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat
 
   loadConfig();
 
-  if(firstTime) {
-    if (!(boost::filesystem::exists("./config/DPWrenGABGS.xml")))
-      saveConfig();
-  }
+  if(firstTime)
+    saveConfig();
 
   frame = new IplImage(img_input);
   
@@ -71,7 +67,7 @@ void DPWrenGABGS::process(const cv::Mat &img_input, cv::Mat &img_output, cv::Mat
   lowThresholdMask.Clear();
   bgs.Update(frameNumber, frame_data, lowThresholdMask);
   
-  cv::Mat foreground(highThresholdMask.Ptr());
+  cv::Mat foreground = cv::cvarrToMat(highThresholdMask.Ptr());
 
   if(showOutput)
     cv::imshow("Gaussian Average (Wren)", foreground);
