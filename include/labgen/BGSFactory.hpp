@@ -18,30 +18,19 @@
  */
 #pragma once
 
-#include <cstddef>
-#include <string>
-#include <vector>
+#include <memory>
 
-#include <opencv2/core/core.hpp>
+#include <IBGS.h>
 
 namespace ns_labgen {
   namespace ns_internals {
     /* ====================================================================== *
-     * Utils                                                                  *
+     * BGSFactory                                                             *
      * ====================================================================== */
-
-    class Utils {
+    class BGSFactory {
       public:
 
-        typedef std::vector<cv::Rect>                                     ROIs;
-
-      public:
-
-        static std::string getMethod(std::string method);
-
-        static ROIs getROIs(size_t height, size_t width, size_t segments);
-
-        static ROIs getROIs(size_t height, size_t width);
+        static std::shared_ptr<IBGS> getBGSAlgorithm(std::string algorithm);
     };
   } /* ns_internals */
 } /* ns_labgen */

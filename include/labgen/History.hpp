@@ -20,265 +20,123 @@
  */
 #pragma once
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <sstream>
 #include <vector>
 
 #include <opencv2/core/core.hpp>
 
 #include "Utils.hpp"
 
-#define CHANNELS                                                              3
+namespace ns_labgen {
+  namespace ns_internals {
+    /* ====================================================================== *
+     * HistoryMat                                                             *
+     * ====================================================================== */
 
-/* ========================================================================== *
- * HistoryMat                                                                 *
- * ========================================================================== */
+    class HistoryMat {
+        friend bool operator< (const HistoryMat& lhs, const HistoryMat& rhs);
+        friend bool operator<=(const HistoryMat& lhs, const HistoryMat& rhs);
+        friend bool operator==(const HistoryMat& lhs, const HistoryMat& rhs);
+        friend bool operator< (const HistoryMat& lhs, const uint32_t&   rhs);
+        friend bool operator<=(const HistoryMat& lhs, const uint32_t&   rhs);
+        friend bool operator==(const HistoryMat& lhs, const uint32_t&   rhs);
+        friend bool operator< (const uint32_t&   lhs, const HistoryMat& rhs);
+        friend bool operator<=(const uint32_t&   lhs, const HistoryMat& rhs);
+        friend bool operator==(const uint32_t&   lhs, const HistoryMat& rhs);
 
-struct HistoryMat {
-  cv::Mat mat;
-  uint32_t positives;
+      protected:
 
-  /****************************************************************************/
+        cv::Mat mat;
+        uint32_t positives;
 
-  HistoryMat(const cv::Mat& mat, const uint32_t positives) :
-    mat(mat.clone()), positives(positives) {}
+      public:
 
-  /****************************************************************************/
+        HistoryMat(const cv::Mat& mat, const uint32_t positives);
 
-  HistoryMat(const HistoryMat& copy) :
-    mat(copy.mat.clone()), positives(copy.positives) {}
+        HistoryMat(const HistoryMat& copy);
 
-  /****************************************************************************/
+        HistoryMat& operator=(const HistoryMat& copy);
 
-  HistoryMat& operator=(const HistoryMat& copy) {
-    copy.mat.copyTo(mat);
-    positives = copy.positives;
+        cv::Mat& operator*();
 
-    return *this;
-  }
-};
+        const cv::Mat& operator*() const;
+    };
 
-/******************************************************************************
- * Operator(s) overloading                                                    *
- ******************************************************************************/
+    /* ====================================================================== *
+     * HistoryInterface                                                       *
+     * ====================================================================== */
 
-inline bool operator<(const HistoryMat& lhs, const HistoryMat& rhs) {
-  return lhs.positives < rhs.positives;
-}
+    struct HistoryInterface {
+      virtual void insert(
+        const cv::Mat& segmentation_map,
+        const cv::Mat& current_frame
+      ) = 0;
 
-/******************************************************************************/
+      virtual void median(cv::Mat& result, size_t size) const = 0;
+    };
 
-inline bool operator<=(const HistoryMat& lhs, const HistoryMat& rhs) {
-  return lhs.positives <= rhs.positives;
-}
+    /* ====================================================================== *
+     * History                                                                *
+     * ====================================================================== */
 
-/******************************************************************************/
+    class History : public HistoryInterface {
+      public:
+        typedef std::vector<HistoryMat>                             HistoryVec;
 
-inline bool operator==(const HistoryMat& lhs, const HistoryMat& rhs) {
-  return lhs.positives == rhs.positives;
-}
+      protected:
 
-/******************************************************************************/
+        HistoryVec history;
+        size_t buffer_size;
 
-inline bool operator<(const HistoryMat& lhs, const uint32_t& rhs) {
-  return lhs.positives < rhs;
-}
+      public:
 
-/******************************************************************************/
+      explicit History(size_t buffer_size);
 
-inline bool operator<=(const HistoryMat& lhs, const uint32_t& rhs) {
-  return lhs.positives <= rhs;
-}
+      HistoryVec& operator*();
 
-/******************************************************************************/
+      const HistoryVec& operator*() const;
 
-inline bool operator==(const HistoryMat& lhs, const uint32_t& rhs) {
-  return lhs.positives == rhs;
-}
+      virtual void insert(
+        const cv::Mat& segmentation_map,
+        const cv::Mat& current_frame
+      ) override;
 
-/******************************************************************************/
+      virtual void median(cv::Mat& result, size_t size) const override;
 
-inline bool operator<(const uint32_t& lhs, const HistoryMat& rhs) {
-  return lhs < rhs.positives;
-}
+      bool empty() const;
+    };
 
-/******************************************************************************/
+    /* ====================================================================== *
+     * PatchesHistory                                                         *
+     * ====================================================================== */
 
-inline bool operator<=(const uint32_t& lhs, const HistoryMat& rhs) {
-  return lhs <= rhs.positives;
-}
+    class PatchesHistory : public HistoryInterface {
+      public:
 
-/******************************************************************************/
+        typedef std::vector<History>                         PatchesHistoryVec;
 
-inline bool operator==(const uint32_t& lhs, const HistoryMat& rhs) {
-  return lhs == rhs.positives;
-}
+      protected:
 
-/* ========================================================================== *
- * HistoryInterface                                                           *
- * ========================================================================== */
+        PatchesHistoryVec p_history;
+        const Utils::ROIs& rois;
 
-struct HistoryInterface {
-  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) = 0;
-  virtual void median(cv::Mat& result, size_t size) const = 0;
-};
+      public:
 
-/* ========================================================================== *
- * History                                                                    *
- * ========================================================================== */
+        PatchesHistory(const Utils::ROIs& rois, size_t buffer_size);
 
-struct History : public HistoryInterface {
-  typedef std::vector<HistoryMat>                                   HistoryVec;
+        virtual void insert(
+          const cv::Mat& segmentation_map,
+          const cv::Mat& current_frame
+        ) override;
 
-  /****************************************************************************/
+        virtual void median(cv::Mat& result, size_t size) const override;
 
-  HistoryVec history;
-  size_t bufferSize;
+        bool empty() const;
+    };
 
-  /****************************************************************************/
-
-  explicit History(size_t bufferSize) : history(), bufferSize(bufferSize) {
-    history.reserve(bufferSize + 1);
-  }
-
-  /****************************************************************************/
-
-  HistoryVec& operator*() { return history; }
-
-  /****************************************************************************/
-
-  const HistoryVec& operator*() const { return history; }
-
-  /****************************************************************************/
-
-  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) override {
-    uint32_t positives = countNonZero(segmentationMap);
-
-    if (history.empty())
-      history.push_back(HistoryMat(frame, positives));
-    else {
-      bool inserted = false;
-
-      for (
-        HistoryVec::iterator it = history.begin(), end = history.end();
-        it != end;
-        ++it
-      ) {
-        if (positives <= (*it)) {
-          history.insert(it, HistoryMat(frame, positives));
-          inserted = true;
-
-          if (history.size() > bufferSize)
-            history.erase(history.end() - 1);
-
-          break;
-        }
-      }
-
-      if ((history.size() < bufferSize) && !inserted)
-        history.push_back(HistoryMat(frame, positives));
-    }
-  }
-
-  /****************************************************************************/
-
-  virtual void median(cv::Mat& result, size_t size) const override {
-    if (history.size() == 1 || size == 1)
-      history[0].mat.copyTo(result);
-
-    static std::vector<unsigned char> bufferR(bufferSize);
-    static std::vector<unsigned char> bufferG(bufferSize);
-    static std::vector<unsigned char> bufferB(bufferSize);
-
-    size_t _size = std::min(history.size(), size);
-
-    for (size_t i = 0; i < (history[0].mat.total() * CHANNELS); i += CHANNELS) {
-      for (size_t num = 0; num < _size; ++num) {
-        bufferR[num] = history[num].mat.data[i    ];
-        bufferG[num] = history[num].mat.data[i + 1];
-        bufferB[num] = history[num].mat.data[i + 2];
-      }
-
-      std::sort(bufferR.begin(), bufferR.begin() + _size);
-      std::sort(bufferG.begin(), bufferG.begin() + _size);
-      std::sort(bufferB.begin(), bufferB.begin() + _size);
-
-      size_t middle = _size / 2;
-
-      if (_size & 1) {
-        std::nth_element(bufferR.begin(), bufferR.begin() + middle, bufferR.begin() + _size);
-        std::nth_element(bufferG.begin(), bufferG.begin() + middle, bufferG.begin() + _size);
-        std::nth_element(bufferB.begin(), bufferB.begin() + middle, bufferB.begin() + _size);
-
-        result.data[i    ] = bufferR[middle];
-        result.data[i + 1] = bufferG[middle];
-        result.data[i + 2] = bufferB[middle];
-      }
-      else {
-        std::nth_element(bufferR.begin(), bufferR.begin() + (middle - 1), bufferR.begin() + _size);
-        std::nth_element(bufferG.begin(), bufferG.begin() + (middle - 1), bufferG.begin() + _size);
-        std::nth_element(bufferB.begin(), bufferB.begin() + (middle - 1), bufferB.begin() + _size);
-
-        std::nth_element(bufferR.begin() + middle, bufferR.begin() + middle, bufferR.begin() + _size);
-        std::nth_element(bufferG.begin() + middle, bufferG.begin() + middle, bufferG.begin() + _size);
-        std::nth_element(bufferB.begin() + middle, bufferB.begin() + middle, bufferB.begin() + _size);
-
-        result.data[i   ] = (((int)bufferR[middle - 1]) + ((int)bufferR[middle])) / 2;
-        result.data[i + 1] = (((int)bufferG[middle - 1]) + ((int)bufferG[middle])) / 2;
-        result.data[i + 2] = (((int)bufferB[middle - 1]) + ((int)bufferB[middle])) / 2;
-      }
-    }
-  }
-};
-
-/* ========================================================================== *
- * PatchesHistory                                                             *
- * ========================================================================== */
-
-struct PatchesHistory : public HistoryInterface {
-  typedef std::vector<History>                               PatchesHistoryVec;
-
-  /****************************************************************************/
-
-  PatchesHistoryVec pHistory;
-  const Utils::ROIs& rois;
-
-  /****************************************************************************/
-
-  PatchesHistory(const Utils::ROIs& rois, size_t bufferSize) :
-    pHistory(), rois(rois) {
-
-    pHistory.reserve(rois.size());
-
-    for (size_t i = 0; i < rois.size(); ++i)
-      pHistory.push_back(History(bufferSize));
-  }
-
-  /****************************************************************************/
-
-  virtual void insert(const cv::Mat& segmentationMap, const cv::Mat& frame) override {
-    for (size_t i = 0; i < rois.size(); ++i) {
-      pHistory[i].insert(
-        segmentationMap(rois[i]),
-        frame(rois[i])
-      );
-    }
-  }
-
-  /****************************************************************************/
-
-  virtual void median(cv::Mat& result, size_t size) const override {
-    for (size_t i = 0; i < rois.size(); ++i) {
-      cv::Mat patch(
-        pHistory[i].history.back().mat.rows,
-        pHistory[i].history.back().mat.cols,
-        CV_8UC3
-      );
-
-      pHistory[i].median(patch, size);
-      patch.copyTo(result(rois[i]));
-    }
-  }
-};
+#define _NS_LABGEN_NS_INTERNALS_HISTORY_IPP_
+#include "History.ipp"
+#undef  _NS_LABGEN_NS_INTERNALS_HISTORY_IPP_
+  } /* ns_internals */
+} /* ns_labgen */

@@ -17,12 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with LaBGen.  If not, see <http://www.gnu.org/licenses/>.
 add_executable(
-  LaBGen
-  LaBGen.cpp
+  LaBGen-cli
+  LaBGen-cli.cpp
 )
 
 target_link_libraries(
-  LaBGen
+  LaBGen-cli
+  LaBGen_static
   ${Boost_LIBRARIES}
   ${OpenCV_LIBS}
   bgs
