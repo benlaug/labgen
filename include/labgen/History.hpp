@@ -119,7 +119,7 @@ namespace ns_labgen {
       protected:
 
         PatchesHistoryVec p_history;
-        const Utils::ROIs& rois;
+        Utils::ROIs rois;
 
       public:
 

@@ -48,7 +48,7 @@ n(n),
 p(p),
 bgs(BGSFactory::getBGSAlgorithm(a)),
 segmentation_map(Mat(height, width, CV_8UC1)),
-mat_for_bgs_lib(Mat(height, width, CV_8UC1)),
+mat_for_bgs_lib(Mat(height, width, CV_8UC3)),
 history(Utils::getROIs(height, width, n), s),
 first_frame(true) {}
 

@@ -42,7 +42,7 @@ include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
 # BGSLibrary
 add_subdirectory(bgslibrary)
 include_directories(bgslibrary)
-file(MAKE_DIRECTORY ${LaBGen_BINARY_DIR}/config)
+file(MAKE_DIRECTORY ${LaBGen_BINARY_DIR}/main/config)
 
 # Include directory.
 include_directories(include)
