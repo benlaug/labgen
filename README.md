@@ -73,6 +73,10 @@ If you use the LaBGen algorithm in your work, please cite the paper [1].
 }
 ```
 
+## Alternatives
+
+A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
+
 ## Acknowledgments
 
 This program incorporates some parts of the [BGSLibrary](https://github.com/andrewssobral/bgslibrary) [2]. We are very grateful to Andrews Sobral for sharing his library.
