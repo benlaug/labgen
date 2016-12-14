@@ -66,7 +66,7 @@ If you use the LaBGen method in your work, please cite papers [1] and [2] as bel
 	journal = {Pattern Recognition Letters},
 	publisher = {Elsevier},
 	year = {2016},
-	doi = {10.1016/j.patrec.2016.11.022},
+	doi = {10.1016/j.patrec.2016.11.022}
 }
 
 @inproceedings{Laugraud2015Simple,
