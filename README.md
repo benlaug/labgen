@@ -57,7 +57,7 @@ Note that the program has been successfully tested on Debian-like GNU/Linux oper
 
 ## Citation
 
-If you use the LaBGen method in your work, please cite papers [1] and [2] as below:
+If you use LaBGen in your work, please cite papers [[1]](#references) and [2] as below:
 
 ```
 @article{Laugraud2016LaBGen,
