@@ -2,7 +2,7 @@
 
 ![Screenshot](readme/graphical-abstract.png)
 
-LaBGen is a patch-based stationary background generation method that was introduced in [2] and extensively described in [1]. Note that LaBGen has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016). The purpose of this repository is twofold:
+LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. Note that LaBGen has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016). The purpose of this repository is twofold:
 
 1. To share the source code of the method.
 2. To embed the method in a ready-to-use program.
@@ -25,7 +25,7 @@ Once the program has been compiled, the following command gives the complete lis
 $ ./LaBGen-cli -h
 ```
 
-In this program, the syntax used to provide the path of the input video sequence is the same one used by the OpenCV library. Thus, for instance, one can generate a stationary background image for the IBMtest2 sequence of the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [4] with *(A, S, N, P) = (MoG Z., 5, 3, 1)* as follows:
+In this program, the syntax used to provide the path of the input video sequence is the same one used by the OpenCV library. Thus, for instance, one can generate a stationary background image for the IBMtest2 sequence of the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [[4](#references)] with *(A, S, N, P) = (MoG Z., 5, 3, 1)* as follows:
 
 ```
 $ ./LaBGen-cli -i path_to_IBMtest2/IBMtest2_%6d.png -o my_output_path -a mog_zivkovic -s 5 -n 3 -p 1
@@ -57,7 +57,7 @@ Note that the program has been successfully tested on Debian-like GNU/Linux oper
 
 ## Citation
 
-If you use LaBGen in your work, please cite papers [[1](#references)] and [2] as below:
+If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#references)] as below:
 
 ```
 @article{Laugraud2016LaBGen,
@@ -88,7 +88,7 @@ A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](
 
 ## Acknowledgments
 
-This program incorporates some parts of the [BGSLibrary](https://github.com/andrewssobral/bgslibrary) [3]. We are very grateful to Andrews Sobral for sharing his library.
+This program incorporates some parts of the [BGSLibrary](https://github.com/andrewssobral/bgslibrary) [[3](#references)]. We are very grateful to Andrews Sobral for sharing his library.
 
 ## References
 
