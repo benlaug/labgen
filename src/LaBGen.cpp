@@ -54,7 +54,7 @@ first_frame(true) {}
 
 /******************************************************************************/
 
-void LaBGen::insert(const cv::Mat& current_frame) {
+void LaBGen::insert(const Mat& current_frame) {
   /* Background subtraction. */
   bgs->process(current_frame.clone(), segmentation_map, mat_for_bgs_lib);
 
@@ -72,7 +72,7 @@ void LaBGen::insert(const cv::Mat& current_frame) {
 
 /******************************************************************************/
 
-void LaBGen::generate_background(cv::Mat& background) const {
+void LaBGen::generate_background(Mat& background) const {
   if (history.empty()) {
     throw runtime_error(
       "Cannot generate the background with less than two inserted frames"

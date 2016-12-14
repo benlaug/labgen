@@ -313,7 +313,7 @@ int main(int argc, char** argv) {
         labgen.generate_background(background);
         imshow("Estimated background", background);
 
-        cvWaitKey(1);
+        waitKey(1);
       }
 
       /* Move iterator. */
@@ -347,8 +347,8 @@ int main(int argc, char** argv) {
   /* Cleaning. */
   if (visualization) {
     cout << endl << "Press any key to quit..." << endl;
-    cvWaitKey(0);
-    cvDestroyAllWindows();
+    waitKey(0);
+    destroyAllWindows();
   }
 
   /* Bye. */
