@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include <IBGS.h>
 
@@ -27,10 +28,11 @@ namespace ns_labgen {
     /* ====================================================================== *
      * BGSFactory                                                             *
      * ====================================================================== */
+
     class BGSFactory {
       public:
 
-        static std::shared_ptr<IBGS> getBGSAlgorithm(std::string algorithm);
+        static std::shared_ptr<IBGS> get_bgs_algorithm(std::string algorithm);
     };
   } /* ns_internals */
 } /* ns_labgen */

@@ -38,27 +38,27 @@ using namespace ns_labgen::ns_internals;
  * BGSFactory                                                                 *
  * ========================================================================== */
 
-std::shared_ptr<IBGS> BGSFactory::getBGSAlgorithm(string algorithm) {
+shared_ptr<IBGS> BGSFactory::get_bgs_algorithm(string algorithm) {
   if (algorithm == "frame_difference")
-    return std::shared_ptr<IBGS>(new FrameDifferenceBGS);
+    return shared_ptr<IBGS>(new FrameDifferenceBGS);
   else if (algorithm == "mog_grimson")
-    return std::shared_ptr<IBGS>(new DPGrimsonGMMBGS);
+    return shared_ptr<IBGS>(new DPGrimsonGMMBGS);
   else if (algorithm == "mog_zivkovic")
-    return std::shared_ptr<IBGS>(new DPZivkovicAGMMBGS);
+    return shared_ptr<IBGS>(new DPZivkovicAGMMBGS);
   else if (algorithm == "pfinder")
-    return std::shared_ptr<IBGS>(new DPWrenGABGS);
+    return shared_ptr<IBGS>(new DPWrenGABGS);
   else if (algorithm == "lbp")
-    return std::shared_ptr<IBGS>(new DPTextureBGS);
+    return shared_ptr<IBGS>(new DPTextureBGS);
   else if (algorithm == "som_adaptive")
-    return std::shared_ptr<IBGS>(new LBAdaptiveSOM);
+    return shared_ptr<IBGS>(new LBAdaptiveSOM);
   else if (algorithm == "vumeter")
-    return std::shared_ptr<IBGS>(new VuMeter);
+    return shared_ptr<IBGS>(new VuMeter);
   else if (algorithm == "kde")
-    return std::shared_ptr<IBGS>(new KDE);
+    return shared_ptr<IBGS>(new KDE);
   else if (algorithm == "sigma_delta")
-    return std::shared_ptr<IBGS>(new SigmaDeltaBGS);
+    return shared_ptr<IBGS>(new SigmaDeltaBGS);
   else if (algorithm == "subsense")
-    return std::shared_ptr<IBGS>(new SuBSENSEBGS);
+    return shared_ptr<IBGS>(new SuBSENSEBGS);
   else {
     throw runtime_error(
       "The BGS algorithm " + algorithm + " is not supported."
