@@ -26,5 +26,4 @@ target_link_libraries(
   LaBGen_static
   ${Boost_LIBRARIES}
   ${OpenCV_LIBS}
-  bgs
 )

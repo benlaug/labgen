@@ -40,6 +40,7 @@ set_target_properties(
 target_link_libraries(
   LaBGen_shared
   ${OpenCV_LIBS}
+  bgs
 )
 
 # Static library.
@@ -60,4 +61,5 @@ set_target_properties(
 target_link_libraries(
   LaBGen_static
   ${OpenCV_LIBS}
+  bgs
 )
