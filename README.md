@@ -2,16 +2,22 @@
 
 ![Screenshot](readme/graphical-abstract.png)
 
-LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. Our method has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016), and on the SBI dataset according to [three metrics over six](http://sbmi2015.na.icar.cnr.it/SBIdataset.html#[Results]).
+LaBGen is an award-winning patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)].
 
 The purpose of this repository is twofold:
 
 1. To share the source code of the method.
 2. To embed the method in a ready-to-use program.
 
+## Performance of the method
+
+Our method won an award and has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016), and on the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [[4](#references)] according to [three metrics over six](http://sbmi2015.na.icar.cnr.it/SBIdataset.html#[Results]). The current ranking and the quantitative metrics computed on the [SBMnet dataset](http://www.scenebackgroundmodeling.net) are available [here](http://pione.dinf.usherbrooke.ca/results).
+
+![Screenshot](readme/award.jpg)
+
 ## Compiling the program
 
-The program has been developed in standard C++ and is distributed under the [GPLv3](LICENSE) license. In order to compile it, you need a C++ compiler, a copy of the [Boost](http://www.boost.org) library, a copy of the [OpenCV](http://opencv.org) library, and the [CMake](https://cmake.org) build automation tool. On UNIX-like environments, the program can be compiled as follows, considering that your terminal is in the source code directory:
+The program implementing the method has been developed in C++11 and is distributed under the [GPLv3](LICENSE) license. In order to compile it, you need a modern C++ compiler, a copy of the [Boost](http://www.boost.org) library, a copy of the [OpenCV](http://opencv.org) library, and the [CMake](https://cmake.org) build automation tool. On UNIX-like environments, the program can be compiled as follows, considering that your terminal is in the source code directory:
 
 ```
 $ cd build
@@ -21,7 +27,7 @@ $ make
 
 ## Running the program
 
-Once the program has been compiled, the following command gives the complete list of the options:
+Once the program has been compiled, the following command gives the complete list of available options:
 
 ```
 $ ./LaBGen-cli -h
