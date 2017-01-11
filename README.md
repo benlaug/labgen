@@ -2,7 +2,7 @@
 
 ![Screenshot](readme/graphical-abstract.png)
 
-LaBGen is an award-winning patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)].
+LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)].
 
 The purpose of this repository is twofold:
 
