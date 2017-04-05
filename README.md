@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
+
 # LaBGen
 
 ![Screenshot](.readme/graphical-abstract.png)
@@ -91,6 +93,15 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 ## Alternatives
 
 A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
+
+## Continuous integration
+
+Each commited revision is automatically tested using [Travis CI](https://travis-ci.org) on:
+
+* Ubuntu 14.04 with OpenCV 2 installed from the Ubuntu repositories.
+* Ubuntu 14.04 with OpenCV 3.2 compiled from the sources.
+* OS X El Capitan with OpenCV 2 installed with [Homebrew](https://brew.sh).
+* OS X El Capitan with OpenCV 3 installed with [Homebrew](https://brew.sh).
 
 ## Acknowledgments
 
