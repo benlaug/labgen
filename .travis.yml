@@ -1,5 +1,27 @@
 language: cpp
 
+matrix:
+  include:
+#    - os: linux
+#      dist: trusty
+#      compiler: g++
+#      env: OPENCV_VERSION=2
+
+    - os: linux
+      dist: trusty
+      compiler: g++
+      env: OPENCV_VERSION=3
+#      cache:
+#        directories: $HOME/opencv-3.2.0
+
+#    - os: osx
+#      compiler: clang++
+#      env: OPENCV_VERSION=2
+
+#    - os: osx
+#      compiler: clang++
+#      env: OPENCV_VERSION=3
+
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi
 
@@ -27,17 +49,17 @@ before_script:
   - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd build; fi
   - if [[ "$INSTALL_OPENCV" == "1" ]]
     then
-      cmake -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr/local .. \
-            -DWITH_OPENCL=OFF \
-            -DWITH_CUDA=OFF \
-            -DWITH_VTK=OFF \
-            -DWITH_MATLAB=OFF \
-            -DBUILD_opencv_java=OFF \
-            -DBUILD_opencv_python2=OFF \
-            -DBUILD_opencv_python3=OFF \
-            -DBUILD_TESTS=OFF \
-            -DBUILD_PERF_TESTS=OFF
+      cmake -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_INSTALL_PREFIX=/usr/local
+            -DWITH_OPENCL=OFF
+            -DWITH_CUDA=OFF
+            -DWITH_VTK=OFF
+            -DWITH_MATLAB=OFF
+            -DBUILD_opencv_java=OFF
+            -DBUILD_opencv_python2=OFF
+            -DBUILD_opencv_python3=OFF
+            -DBUILD_TESTS=OFF
+            -DBUILD_PERF_TESTS=OFF ..
     fi
   - if [[ "$INSTALL_OPENCV" == "1" ]]; then make -j4; fi
   - if [[ "$INSTALL_OPENCV" == "1" ]]; then sudo make -j4 install; fi
@@ -47,25 +69,3 @@ script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=Release ..
   - make -j4
-
-matrix:
-  include:
-#    - os: linux
-#      dist: trusty
-#      compiler: g++
-#      env: OPENCV_VERSION=2
-
-    - os: linux
-      dist: trusty
-      compiler: g++
-      env: OPENCV_VERSION=3
-#      cache:
-#        directories: $HOME/opencv-3.2.0
-
-#    - os: osx
-#      compiler: clang++
-#      env: OPENCV_VERSION=2
-
-#    - os: osx
-#      compiler: clang++
-#      env: OPENCV_VERSION=3
