@@ -8,8 +8,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" ==   "osx" ]]; then brew tap homebrew/science; fi
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq libopencv-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq libboost-program-options-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "2" ]]; then sudo apt-get install -qq libopencv-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]]; then sudo apt-get install -qq libavcodec-dev libavdevice-dev libavfilter-dev libavformat-dev libavresample-dev libavutil-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]]; then sudo apt-get install -qq libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev; fi
 
@@ -18,15 +18,17 @@ install:
   - if [[ "$TRAVIS_OS_NAME" ==   "osx" && "$OPENCV_VERSION" == "3" ]]; then brew ln opencv3 --force; fi
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then tar zxf 3.2.0.tar.gz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd opencv-3.2.0; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then mkdir build; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd build; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then make -j4; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then sudo make -j4 install; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd ../..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then WORKING_DIR="$(pwd)" && INSTALL_OPENCV=1; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd "$HOME"; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then tar zxf 3.2.0.tar.gz; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd opencv-3.2.0; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then mkdir build; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd build; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then make -j4; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then sudo make -j4 install; fi
+  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd "$WORKING_DIR"; fi
 
 script:
   - cd build
