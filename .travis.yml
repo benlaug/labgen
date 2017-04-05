@@ -47,7 +47,7 @@ before_script:
 #  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd opencv-3.2.0; fi
 #  - if [[ "$INSTALL_OPENCV" == "1" ]]; then mkdir build; fi
 #  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd build; fi
-#  - if [[ "$INSTALL_OPENCV" == "1" ]];
+  - if [[ "$INSTALL_OPENCV" == "1" ]];
     then
       wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz;
       tar zxf 3.2.0.tar.gz;
