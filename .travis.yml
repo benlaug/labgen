@@ -29,3 +29,8 @@ matrix:
 
     - os: osx
       compiler: clang++
+      env: OPENCV_VERSION=2
+
+    - os: osx
+      compiler: clang++
+      env: OPENCV_VERSION=3
