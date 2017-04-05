@@ -106,7 +106,7 @@ before_script:
         make -j4;
         sudo make -j4 install;
       else
-        echo "OpenCV 3.2 has been fetched from the cache"
+        echo "OpenCV 3.2 has been fetched from the cache";
       fi;
       cd "$WORKING_DIR";
     fi
