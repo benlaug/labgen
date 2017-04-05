@@ -21,7 +21,6 @@ matrix:
     - os: linux
       dist: trusty
       compiler: g++
-      env: OPENCV_VERSION=2
 
     - os: osx
       compiler: clang++
