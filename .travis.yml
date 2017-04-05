@@ -83,8 +83,8 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]];
     then
       WORKING_DIR="$(pwd)";
-      cd "$HOME";
-      if [[ -n "$(ls -A opencv-3.2.0)" ]];
+      cd "$HOME/opencv-3.2.0";
+      if [[ -n "$(ls -A)" ]];
       then
         echo "OpenCV 3.2 has been fetched from the cache";
       else
@@ -106,8 +106,8 @@ before_script:
               -DBUILD_TESTS=OFF
               -DBUILD_PERF_TESTS=OFF ..;
         make -j4;
-        sudo make -j4 install;
       fi;
+      sudo make -j4 install;
       cd "$WORKING_DIR";
     fi
 
