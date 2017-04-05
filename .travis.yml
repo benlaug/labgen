@@ -21,8 +21,13 @@ script:
   - make
 
 matrix:
+  exclude:
+    - os: linux
+      dist: precise
+
   include:
-    - dist: trusty
+    - os: linux
+      dist: trusty
       compiler: g++
       env: OPENCV_VERSION=2
 
