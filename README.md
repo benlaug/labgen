@@ -1,10 +1,12 @@
+# LaBGen
+
 [![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
 
-# LaBGen
+LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)].
 
 ![Screenshot](.readme/graphical-abstract.png)
 
-LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
+The purpose of this repository is twofold:
 
 1. To share the source code of the method.
 2. To embed the method in a ready-to-use program.
