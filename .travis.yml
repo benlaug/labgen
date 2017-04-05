@@ -18,15 +18,15 @@ install:
   - if [[ "$TRAVIS_OS_NAME" ==   "osx" && "$OPENCV_VERSION" == "3" ]]; then brew ln opencv3 --force; fi
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then tar zxf 3.2.0.tar.gz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then cd opencv-3.2.0; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then mkdir build; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then cd build; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then make -j4; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then sudo make -j4 install; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && !-d "opencv-3.2.0" ]]; then cd ../..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then tar zxf 3.2.0.tar.gz; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd opencv-3.2.0; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then mkdir build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then make -j4; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then sudo make -j4 install; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then cd ../..; fi
 
 script:
   - cd build
