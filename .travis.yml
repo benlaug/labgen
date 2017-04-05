@@ -1,0 +1,24 @@
+language: cpp
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq libopencv-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq libboost-program-options-dev; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then /usr/bin/yes | pip uninstall numpy; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap homebrew/science; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install opencv; fi
+
+script:
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - make
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      compiler: g++
+    - os: osx
+      compiler: clang++
