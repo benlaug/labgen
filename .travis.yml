@@ -42,13 +42,18 @@ install:
 before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]]; then WORKING_DIR="$(pwd)" && cd "$HOME"; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" && ! -d "opencv-3.2.0" ]]; then INSTALL_OPENCV=1; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]; then tar zxf 3.2.0.tar.gz; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd opencv-3.2.0; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]; then mkdir build; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd build; fi
-  - if [[ "$INSTALL_OPENCV" == "1" ]]
+#  - if [[ "$INSTALL_OPENCV" == "1" ]]; then wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz; fi
+#  - if [[ "$INSTALL_OPENCV" == "1" ]]; then tar zxf 3.2.0.tar.gz; fi
+#  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd opencv-3.2.0; fi
+#  - if [[ "$INSTALL_OPENCV" == "1" ]]; then mkdir build; fi
+#  - if [[ "$INSTALL_OPENCV" == "1" ]]; then cd build; fi
+#  - if [[ "$INSTALL_OPENCV" == "1" ]];
     then
+      wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz;
+      tar zxf 3.2.0.tar.gz;
+      cd opencv-3.2.0;
+      mkdir build;
+      cd build;
       cmake -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=/usr/local
             -DWITH_OPENCL=OFF
@@ -59,7 +64,7 @@ before_script:
             -DBUILD_opencv_python2=OFF
             -DBUILD_opencv_python3=OFF
             -DBUILD_TESTS=OFF
-            -DBUILD_PERF_TESTS=OFF ..
+            -DBUILD_PERF_TESTS=OFF ..;
     fi
   - if [[ "$INSTALL_OPENCV" == "1" ]]; then make -j4; fi
   - if [[ "$INSTALL_OPENCV" == "1" ]]; then sudo make -j4 install; fi
