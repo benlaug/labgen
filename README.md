@@ -61,8 +61,6 @@ With this last option, the processing will be slower has an estimation of the st
 
 ![Screenshot](.readme/screenshot.png)
 
-Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`) and macOS (compiled with `clang++`).
-
 ## Citation
 
 If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#references)] as below:
@@ -94,14 +92,14 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 
 A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
 
-## Continuous integration
+## Testing
 
 Each commited revision is automatically tested using [Travis CI](https://travis-ci.org) on:
 
-* Ubuntu 14.04 with OpenCV 2 installed from the Ubuntu repositories.
-* Ubuntu 14.04 with OpenCV 3.2 compiled from the sources.
-* OS X El Capitan with OpenCV 2 installed with [Homebrew](https://brew.sh).
-* OS X El Capitan with OpenCV 3 installed with [Homebrew](https://brew.sh).
+* Ubuntu 14.04 with the `g++` compiler and OpenCV 2.3 installed from the Ubuntu repositories.
+* Ubuntu 14.04 with the `g++` compiler and OpenCV 3.2 compiled from the sources.
+* OS X El Capitan with the `clang++` compiler and OpenCV 2.4 installed with [Homebrew](https://brew.sh).
+* OS X El Capitan with the `clang++` compiler and OpenCV 3.2 installed with [Homebrew](https://brew.sh).
 
 ## Acknowledgments
 
