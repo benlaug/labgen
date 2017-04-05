@@ -23,7 +23,10 @@ matrix:
 #      env: OPENCV_VERSION=3
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+    then
+      sudo apt-get update -qq;
+    fi
 
   - if [[ "$TRAVIS_OS_NAME" ==   "osx" ]];
     then
@@ -51,7 +54,7 @@ install:
                                libavformat-dev
                                libavresample1
                                libavresample-dev
-                               libavutil53
+                               libavutil52
                                libavutil-dev
                                libswscale2
                                libswscale-dev
