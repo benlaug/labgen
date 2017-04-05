@@ -1,5 +1,8 @@
 language: cpp
 
+cache:
+  directories: $HOME/opencv-3.2.0
+
 matrix:
   include:
 #    - os: linux
@@ -11,8 +14,6 @@ matrix:
       dist: trusty
       compiler: g++
       env: OPENCV_VERSION=3
-#      cache:
-#        directories: $HOME/opencv-3.2.0
 
 #    - os: osx
 #      compiler: clang++
@@ -85,6 +86,7 @@ before_script:
       cd "$HOME";
       if [[ ! -d "opencv-3.2.0" ]];
       then
+        echo "Compiling and installing OpenCV 3.2"
         wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz;
         tar zxf 3.2.0.tar.gz;
         cd opencv-3.2.0;
@@ -103,6 +105,8 @@ before_script:
               -DBUILD_PERF_TESTS=OFF ..;
         make -j4;
         sudo make -j4 install;
+      else
+        echo "OpenCV 3.2 has been fetched from the cache"
       fi;
       cd "$WORKING_DIR";
     fi
