@@ -22,8 +22,7 @@ script:
 
 matrix:
   include:
-    - os: linux
-      dist: trusty
+    - dist: trusty
       compiler: g++
       env: OPENCV_VERSION=2
 
