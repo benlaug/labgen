@@ -82,11 +82,11 @@ install:
 before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]];
     then
-      WORKING_DIR="$(pwd)";
-      cd "$HOME/opencv-3.2.0";
-      if [[ -n "$(ls -A)" ]];
+      cd "$HOME";
+      if [[ -n "$(ls -A opencv-3.2.0)" ]];
       then
         echo "OpenCV 3.2 has been fetched from the cache";
+        cd opencv-3.2.0/build;
       else
         echo "Compiling and installing OpenCV 3.2";
         wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz;
@@ -108,7 +108,7 @@ before_script:
         make -j4;
       fi;
       sudo make -j4 install;
-      cd "$WORKING_DIR";
+      cd "$TRAVIS_BUILD_DIR";
     fi
 
 script:
