@@ -1,6 +1,6 @@
 # LaBGen
 
-![Screenshot](readme/graphical-abstract.png)
+![Screenshot](.readme/graphical-abstract.png)
 
 LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
 
@@ -11,7 +11,7 @@ LaBGen is a patch-based stationary background generation method that was introdu
 
 Our method won an award and has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016), and on the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [[4](#references)] according to [three metrics over six](http://sbmi2015.na.icar.cnr.it/SBIdataset.html#[Results]). The current ranking and the quantitative metrics computed on the [SBMnet dataset](http://www.scenebackgroundmodeling.net) are available [here](http://pione.dinf.usherbrooke.ca/results).
 
-![Screenshot](readme/award.jpg)
+![Screenshot](.readme/award.jpg)
 
 ## Compiling the program
 
@@ -57,7 +57,7 @@ $ ./LaBGen-cli -i path_to_IBMtest2/IBMtest2_%6d.png -o my_output_path -u -a fram
 
 With this last option, the processing will be slower has an estimation of the stationary background is generated after each frame in the corresponding window. Here is an example of the execution of the program with the `-v` option:
 
-![Screenshot](readme/screenshot.png)
+![Screenshot](.readme/screenshot.png)
 
 Note that the program has been successfully tested on Debian-like GNU/Linux operating systems (compiled with `g++`) and macOS (compiled with `clang++`).
 
