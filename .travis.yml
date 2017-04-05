@@ -88,7 +88,7 @@ before_script:
       then
         echo "OpenCV 3.2 has been fetched from the cache";
       else
-        echo "Compiling and installing OpenCV 3.2"
+        echo "Compiling and installing OpenCV 3.2";
         wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz;
         tar zxf 3.2.0.tar.gz;
         cd opencv-3.2.0;
