@@ -7,13 +7,13 @@ LaBGen is a patch-based stationary background generation method that was introdu
 1. To share the source code of the method.
 2. To embed the method in a ready-to-use program.
 
-![Screenshot](.readme/graphical-abstract.png)
+![Graphical Abstract](.readme/graphical-abstract.png)
 
 ## Performance of the method
 
 Our method won an award and has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016), and on the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [[4](#references)] according to [three metrics over six](http://sbmi2015.na.icar.cnr.it/SBIdataset.html#[Results]). The current ranking and the quantitative metrics computed on the [SBMnet dataset](http://www.scenebackgroundmodeling.net) are available [here](http://pione.dinf.usherbrooke.ca/results).
 
-![Screenshot](.readme/award.jpg)
+![Award](.readme/award.jpg)
 
 ## Compiling the program
 
