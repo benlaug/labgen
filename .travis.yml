@@ -5,31 +5,29 @@ cache:
 
 matrix:
   include:
-#    - os: linux
-#      dist: trusty
-#      compiler: g++
-#      env: OPENCV_VERSION=2
+    - os: linux
+      dist: trusty
+      compiler: g++
+      env: OPENCV_VERSION=2
 
     - os: linux
       dist: trusty
       compiler: g++
       env: OPENCV_VERSION=3
 
-#    - os: osx
-#      compiler: clang++
-#      env: OPENCV_VERSION=2
+    - os: osx
+      compiler: clang++
+      env: OPENCV_VERSION=2
 
-#    - os: osx
-#      compiler: clang++
-#      env: OPENCV_VERSION=3
+    - os: osx
+      compiler: clang++
+      env: OPENCV_VERSION=3
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+  - if   [[ "$TRAVIS_OS_NAME" == "linux" ]];
     then
       sudo apt-get update -qq;
-    fi
-
-  - if [[ "$TRAVIS_OS_NAME" ==   "osx" ]];
+    elif [[ "$TRAVIS_OS_NAME" ==   "osx" ]]
     then
       /usr/bin/yes | pip uninstall numpy;
       brew update;
@@ -37,46 +35,43 @@ before_install:
     fi
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+  - if   [[ "$TRAVIS_OS_NAME" == "linux" ]];
     then
       sudo apt-get install -qq libboost-program-options-dev;
-    fi
 
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "2" ]];
+      if   [[ "$OPENCV_VERSION" == "2" ]];
+      then
+        sudo apt-get install -qq libopencv-dev;
+      elif [[ "$OPENCV_VERSION" == "3" ]];
+      then
+        sudo apt-get install -qq libavcodec54
+                                 libavcodec-dev
+                                 libavformat54
+                                 libavformat-dev
+                                 libavresample1
+                                 libavresample-dev
+                                 libavutil52
+                                 libavutil-dev
+                                 libswscale2
+                                 libswscale-dev
+                                 libtbb2
+                                 libtbb-dev
+                                 libjpeg-dev
+                                 libpng-dev
+                                 libtiff-dev
+                                 libjasper-dev
+                                 libeigen3-dev;
+      fi;
+    elif [[ "$TRAVIS_OS_NAME" ==   "osx" ]];
     then
-      sudo apt-get install -qq libopencv-dev;
-    fi
-
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$OPENCV_VERSION" == "3" ]];
-    then
-      sudo apt-get install -qq libavcodec54
-                               libavcodec-dev
-                               libavformat54
-                               libavformat-dev
-                               libavresample1
-                               libavresample-dev
-                               libavutil52
-                               libavutil-dev
-                               libswscale2
-                               libswscale-dev
-                               libtbb2
-                               libtbb-dev
-                               libjpeg-dev
-                               libpng-dev
-                               libtiff-dev
-                               libjasper-dev
-                               libeigen3-dev;
-    fi
-
-  - if [[ "$TRAVIS_OS_NAME" ==   "osx" && "$OPENCV_VERSION" == "2" ]];
-    then
-      brew install opencv;
-    fi
-
-  - if [[ "$TRAVIS_OS_NAME" ==   "osx" && "$OPENCV_VERSION" == "3" ]];
-    then
-      brew install opencv3;
-      brew ln opencv3 --force;
+      if   [[ "$OPENCV_VERSION" == "2" ]];
+      then
+        brew install opencv;
+      elif [[ "$OPENCV_VERSION" == "3" ]];
+      then
+        brew install opencv3;
+        brew ln opencv3 --force;
+      fi;
     fi
 
 before_script:
