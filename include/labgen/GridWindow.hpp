@@ -22,62 +22,49 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <memory>
+#include <unordered_set>
 #include <string>
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
-#include <IBGS.h>
-
-#include "History.hpp"
+#include "Utils.hpp"
 
 namespace ns_labgen {
   /* ======================================================================== *
-   * LaBGen                                                                   *
+   * GridWindow                                                               *
    * ======================================================================== */
 
-  class LaBGen {
+  class GridWindow {
     protected:
 
-      size_t height;
-      size_t width;
-      std::string a;
-      int32_t s;
-      int32_t n;
-      int32_t p;
-      std::shared_ptr<IBGS> bgs;
-      cv::Mat segmentation_map;
-      cv::Mat mat_for_bgs_lib;
-      ns_internals::PatchesHistory history;
-      bool first_frame;
+      typedef Utils::ROIs                                                 ROIs;
+
+    protected:
+
+      ROIs rois;
+      std::string window_name;
+      int32_t height;
+      int32_t width;
+      int32_t rows;
+      int32_t cols;
+      cv::Mat buffer;
+      static std::unordered_set<std::string> available_windows;
 
     public:
 
-      LaBGen(
-        size_t height,
-        size_t width,
-        std::string a,
-        int32_t s,
-        int32_t n,
-        int32_t p
+      GridWindow(
+        std::string window_name,
+        int32_t height,
+        int32_t width,
+        int32_t rows = 1,
+        int32_t cols = 1
       );
 
-      void insert(const cv::Mat& current_frame);
+      virtual ~GridWindow();
 
-      void generate_background(cv::Mat& background) const;
+      void display(const cv::Mat& mat, int32_t index = 0);
 
-      size_t get_height() const;
-
-      size_t get_width() const;
-
-      std::string get_a() const;
-
-      int32_t get_s() const;
-
-      int32_t get_n() const;
-
-      int32_t get_p() const;
-
-      const cv::Mat& get_segmentation_map() const;
+      void display(const cv::Mat& mat, int32_t row, int32_t col);
   };
 } /* ns_labgen */

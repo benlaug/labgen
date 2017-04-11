@@ -1,7 +1,9 @@
 /**
- * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
+ * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2017
  * http://www.montefiore.ulg.ac.be/~blaugraud
  * http://www.telecom.ulg.ac.be/labgen
+ *
+ * This file is part of LaBGen.
  *
  * LaBGen is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +22,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace ns_labgen::ns_internals;
+using namespace ns_labgen;
 
 /* ========================================================================== *
  * Utils                                                                      *

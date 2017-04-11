@@ -9,8 +9,6 @@ LaBGen is a patch-based stationary background generation method that was introdu
 
 ![Graphical Abstract](.readme/graphical-abstract.png)
 
-## Performance of the method
-
 Our method won an award and has been ranked first during the [IEEE Scene Background Modeling Contest (SBMC) 2016](http://pione.dinf.usherbrooke.ca/sbmc2016), and on the [SBI dataset](http://sbmi2015.na.icar.cnr.it/SBIdataset.html) [[4](#references)] according to [three metrics over six](http://sbmi2015.na.icar.cnr.it/SBIdataset.html#[Results]). The current ranking and the quantitative metrics computed on the [SBMnet dataset](http://www.scenebackgroundmodeling.net) are available [here](http://pione.dinf.usherbrooke.ca/results).
 
 ![Award](.readme/award.jpg)
@@ -57,9 +55,15 @@ The following strings are accepted with the `-a` option: `frame_difference`, `mo
 $ ./LaBGen-cli -i path_to_IBMtest2/IBMtest2_%6d.png -o my_output_path -u -a frame_difference -v
 ```
 
-With this last option, the processing will be slower has an estimation of the stationary background is generated after each frame in the corresponding window. Here is an example of the execution of the program with the `-v` option:
+With this last option, the processing will be slower as an estimation of the stationary background is generated after each frame in the corresponding window. Here is an example of the execution of the program with the `-v` option:
 
 ![Screenshot](.readme/screenshot.png)
+
+By default, all the items to observe are gathered in a unique window. If, for any reason, a graphical window per item is required, one can add the `-l` option along with `-v`:
+
+![Screenshot Split](.readme/screenshot-split.png)
+
+Finally, one can use the `-w` option to define (in ms) the time to wait between the processing of two frames when the visualization is enabled. This time is given to the `waitKey()` function of OpenCV. Consequently, the option `-w 0` means that you have to press any key to process the next frame. By default, the time is defined to 1 ms.
 
 ## Citation
 
@@ -71,7 +75,7 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 	author = {B. Laugraud and S. Pi{\'e}rard and M. {Van Droogenbroeck}},
 	journal = {Pattern Recognition Letters},
 	publisher = {Elsevier},
-	year = {2016},
+	year = {in press},
 	doi = {10.1016/j.patrec.2016.11.022}
 }
 
@@ -107,7 +111,7 @@ This program incorporates some parts of the [BGSLibrary](https://github.com/andr
 
 ## References
 
-[1] B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, 2016.
+[1] B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, in press.
 
 [2] B. Laugraud, S. Piérard, M. Braham, M. Van Droogenbroeck. Simple median-based method for stationary background generation using background subtraction algorithms. *International Conference on Image Analysis and Processing (ICIAP), Workshop on Scene Background Modeling and Initialization (SBMI)*, 9281:477-484, 2015.
 

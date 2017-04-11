@@ -1,7 +1,9 @@
 /**
- * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
+ * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2017
  * http://www.montefiore.ulg.ac.be/~blaugraud
  * http://www.telecom.ulg.ac.be/labgen
+ *
+ * This file is part of LaBGen.
  *
  * LaBGen is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +24,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -32,6 +35,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include <labgen/LaBGen.hpp>
+#include <labgen/GridWindow.hpp>
 
 using namespace cv;
 using namespace std;
@@ -100,6 +104,16 @@ int main(int argc, char** argv) {
     (
       "visualization,v",
       "enable visualization"
+    )
+    (
+      "split-vis,l",
+      "split the visualization items in separated windows"
+    )
+    (
+      "wait,w",
+      value<int32_t>()->default_value(1),
+      "time to wait (in ms) between the processing of two frames with "
+      "visualization"
     )
   ;
 
@@ -224,17 +238,43 @@ int main(int argc, char** argv) {
   /* "visualization" */
   bool visualization = vars_map.count("visualization");
 
+  /* "split-vis" */
+  bool split_vis = vars_map.count("split-vis");
+
+  if (split_vis && !visualization) {
+    cerr << "/!\\ The split-vis option without visualization will be ignored!";
+    cerr << endl << endl;
+  }
+
+  /* "wait" */
+  int32_t wait = vars_map["wait"].as<int32_t>();
+
+  if ((wait != 1) && !visualization) {
+    cerr << "/!\\ The wait option without visualization will be ignored!";
+    cerr << endl << endl;
+  }
+
+  if ((wait < 0) && visualization) {
+    throw runtime_error(
+      "The wait parameter must be positive!"
+    );
+  }
+
   /* Display parameters to the user. */
   cout << "Input sequence: "      << sequence      << endl;
   cout << "   Output path: "      << output        << endl;
-  cout << "             A: "      << a_param     << endl;
-  cout << "             S: "      << s_param        << endl;
+  cout << "             A: "      << a_param       << endl;
+  cout << "             S: "      << s_param       << endl;
   if (n_param > 0)
-  cout << "             N: "      << n_param      << endl;
+  cout << "             N: "      << n_param       << endl;
   else
   cout << "             N: pixel" << endl;
-  cout << "             P: "      << p_param        << endl;
+  cout << "             P: "      << p_param       << endl;
   cout << " Visualization: "      << visualization << endl;
+  if (visualization)
+  cout << "     Split vis: "      << split_vis     << endl;
+  if (visualization)
+  cout << "     Wait (ms): "      << wait          << endl;
   cout << endl;
 
   /****************************************************************************
@@ -286,6 +326,14 @@ int main(int argc, char** argv) {
   FramesVec::const_iterator it    = begin;
   FramesVec::const_iterator end   = frames.end();
 
+  unique_ptr<GridWindow> window;
+
+  if (visualization && !split_vis) {
+    window = unique_ptr<GridWindow>(
+      new GridWindow("LaBGen", height, width, 1, 3)
+    );
+  }
+
   for (int32_t pass = 0, passes = (p_param + 1) / 2; pass < passes; ++pass) {
     cout << endl << "Processing pass number ";
     cout << boost::lexical_cast<string>((pass * 2) + 1) << "..." << endl;
@@ -307,13 +355,20 @@ int main(int argc, char** argv) {
 
       /* Visualization. */
       if (visualization) {
-        imshow("Input video", (*it));
-        imshow("Segmentation map", labgen.get_segmentation_map());
-
         labgen.generate_background(background);
-        imshow("Estimated background", background);
 
-        waitKey(1);
+        if (split_vis) {
+          imshow("Input video", *it);
+          imshow("Segmentation map", labgen.get_segmentation_map());
+          imshow("Estimated background", background);
+        }
+        else {
+          window->display(*it, 0);
+          window->display(labgen.get_segmentation_map(), 1);
+          window->display(background, 2);
+        }
+
+        waitKey(wait);
       }
 
       /* Move iterator. */

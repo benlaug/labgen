@@ -1,7 +1,9 @@
 /**
- * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016
+ * Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2017
  * http://www.montefiore.ulg.ac.be/~blaugraud
  * http://www.telecom.ulg.ac.be/labgen
+ *
+ * This file is part of LaBGen.
  *
  * LaBGen is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,23 +27,21 @@
 #include <opencv2/core/core.hpp>
 
 namespace ns_labgen {
-  namespace ns_internals {
-    /* ====================================================================== *
-     * Utils                                                                  *
-     * ====================================================================== */
+  /* ======================================================================== *
+   * Utils                                                                    *
+   * ======================================================================== */
 
-    class Utils {
-      public:
+  class Utils {
+    public:
 
-        typedef std::vector<cv::Rect>                                     ROIs;
+      typedef std::vector<cv::Rect>                                     ROIs;
 
-      public:
+    public:
 
-        static std::string getMethod(std::string method);
+      static std::string getMethod(std::string method);
 
-        static ROIs getROIs(size_t height, size_t width, size_t segments);
+      static ROIs getROIs(size_t height, size_t width, size_t segments);
 
-        static ROIs getROIs(size_t height, size_t width);
-    };
-  } /* ns_internals */
+      static ROIs getROIs(size_t height, size_t width);
+  };
 } /* ns_labgen */
