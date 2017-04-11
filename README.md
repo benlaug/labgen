@@ -71,12 +71,12 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 
 ```
 @article{Laugraud2016LaBGen,
-	title = {{LaBGen}: A method based on motion detection for generating the background of a scene},
-	author = {B. Laugraud and S. Pi{\'e}rard and M. {Van Droogenbroeck}},
-	journal = {Pattern Recognition Letters},
-	publisher = {Elsevier},
-	year = {in press},
-	doi = {10.1016/j.patrec.2016.11.022}
+  title = {{LaBGen}: A method based on motion detection for generating the background of a scene},
+  author = {B. Laugraud and S. Pi{\'e}rard and M. {Van Droogenbroeck}},
+  journal = {Pattern Recognition Letters},
+  publisher = {Elsevier},
+  year = {in press},
+  doi = {10.1016/j.patrec.2016.11.022}
 }
 
 @inproceedings{Laugraud2015Simple,
