@@ -1,6 +1,6 @@
 # LaBGen
 
-[![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
+[![OpenCV Version](https://img.shields.io/badge/opencv-2.x%2C%203.x-blue.svg)](http://opencv.org) [![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
 
 LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
 
@@ -94,11 +94,12 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 
 ## Alternatives
 
-A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
+* A variant, called LaBGen-OF, and leverages optical flow algorithms for motion detection, is [available on GitHub](https://github.com/benlaug/labgen-of).
+* A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
 
 ## Testing
 
-Each commited revision is automatically tested using [Travis CI](https://travis-ci.org) on:
+Each commited revision is automatically tested using [Travis CI](https://travis-ci.org/benlaug/labgen) on:
 
 * Ubuntu 14.04 with the `g++` compiler and OpenCV 2.3 installed from the Ubuntu repositories.
 * Ubuntu 14.04 with the `g++` compiler and OpenCV 3.2 compiled from the sources.
