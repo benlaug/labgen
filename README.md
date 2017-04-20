@@ -2,9 +2,7 @@
 
 [![OpenCV Version](https://img.shields.io/badge/opencv-2.x%2C%203.x-blue.svg)](http://opencv.org) [![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
 
-> NEW: Background learning for detection and tracking from RGBD videos (RGBD2017).
-> Workshop in conjunction with ICIAP 2017, Catania (Italy), September 11th or 12th, 2017.
-> [http://rgbd2017.na.icar.cnr.it](http://rgbd2017.na.icar.cnr.it)
+> **NEW:** Background learning for detection and tracking from RGBD videos (RGBD2017). Workshop in conjunction with ICIAP 2017, Catania (Italy), September 11th or 12th, 2017. [http://rgbd2017.na.icar.cnr.it](http://rgbd2017.na.icar.cnr.it)
 
 LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
 
