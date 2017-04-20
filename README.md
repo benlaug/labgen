@@ -4,7 +4,7 @@
 
 > NEW: Background learning for detection and tracking from RGBD videos (RGBD2017).
 > Workshop in conjunction with ICIAP 2017, Catania (Italy), September 11th or 12th, 2017.
-> ![RGBD2017 Link](http://rgbd2017.na.icar.cnr.it)
+> [http://rgbd2017.na.icar.cnr.it](http://rgbd2017.na.icar.cnr.it)
 
 LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
 
