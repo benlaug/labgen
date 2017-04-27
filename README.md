@@ -85,11 +85,13 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
   title = {Simple median-based method for stationary background generation using background subtraction algorithms},
   author = {B. Laugraud and S. Pi{\'e}rard and M. Braham and M. {Van Droogenbroeck}},
   booktitle = {International Conference on Image Analysis and Processing (ICIAP), Workshop on Scene Background Modeling and Initialization (SBMI)},
+  publisher = {Springer},
   series = {Lecture Notes in Computer Science},
   volume = {9281},
   pages = {477-484},
   year = {2015},
-  publisher = {Springer},
+  month = {September},
+  address = {Genova, Italy},
   doi = {10.1007/978-3-319-23222-5_58}
 }
 ```
