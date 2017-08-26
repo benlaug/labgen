@@ -2,8 +2,6 @@
 
 [![OpenCV Version](https://img.shields.io/badge/opencv-2.x%2C%203.x-blue.svg)](http://opencv.org) [![Build Status](https://travis-ci.org/benlaug/labgen.svg?branch=master)](https://travis-ci.org/benlaug/labgen)
 
-> **NEW:** Background learning for detection and tracking from RGBD videos (RGBD2017). Workshop in conjunction with ICIAP 2017, Catania (Italy), September 11th or 12th, 2017. [http://rgbd2017.na.icar.cnr.it](http://rgbd2017.na.icar.cnr.it)
-
 LaBGen is a patch-based stationary background generation method that was introduced in [[2](#references)] and extensively described in [[1](#references)]. The purpose of this repository is twofold:
 
 1. To share the source code of the method.
@@ -72,12 +70,14 @@ Finally, one can use the `-w` option to define (in ms) the time to wait between 
 If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#references)] as below:
 
 ```
-@article{Laugraud2016LaBGen,
+@article{Laugraud2017LaBGen,
   title = {{LaBGen}: A method based on motion detection for generating the background of a scene},
   author = {B. Laugraud and S. Pi{\'e}rard and M. {Van Droogenbroeck}},
   journal = {Pattern Recognition Letters},
   publisher = {Elsevier},
-  year = {in press},
+  volume = {96},
+  pages = {12-21},
+  year = {2017},
   doi = {10.1016/j.patrec.2016.11.022}
 }
 
@@ -116,7 +116,7 @@ This program incorporates some parts of the [BGSLibrary](https://github.com/andr
 
 ## References
 
-[1] B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, in press.
+[1] B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, 96:12-21, 2017.
 
 [2] B. Laugraud, S. Piérard, M. Braham, M. Van Droogenbroeck. Simple median-based method for stationary background generation using background subtraction algorithms. *International Conference on Image Analysis and Processing (ICIAP), Workshop on Scene Background Modeling and Initialization (SBMI)*, 9281:477-484, 2015.
 
