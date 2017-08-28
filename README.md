@@ -98,8 +98,8 @@ If you use LaBGen in your work, please cite papers [[1](#references)] and [[2](#
 
 ## Alternatives
 
-* A variant, called LaBGen-OF, and leverages optical flow algorithms for motion detection, is [available on GitHub](https://github.com/benlaug/labgen-of).
-* A pixel-level variant of LaBGen, called LaBGen-P, is also [available on GitHub](https://github.com/benlaug/labgen-p).
+* A variant, called [LaBGen-OF](https://github.com/benlaug/labgen-of), and leverages optical flow algorithms for motion detection.
+* A pixel-level variant of LaBGen, called [LaBGen-P](https://github.com/benlaug/labgen-p).
 
 ## Testing
 
@@ -116,9 +116,9 @@ This program incorporates some parts of the [BGSLibrary](https://github.com/andr
 
 ## References
 
-[1] B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, 96:12-21, 2017.
+[1] [B. Laugraud, S. Piérard, and M. Van Droogenbroeck. LaBGen: A method based on motion detection for generating the background of a scene. *Pattern Recognition Letters*, 96:12-21, 2017.](http://hdl.handle.net/2268/203572)
 
-[2] B. Laugraud, S. Piérard, M. Braham, M. Van Droogenbroeck. Simple median-based method for stationary background generation using background subtraction algorithms. *International Conference on Image Analysis and Processing (ICIAP), Workshop on Scene Background Modeling and Initialization (SBMI)*, 9281:477-484, 2015.
+[2] [B. Laugraud, S. Piérard, M. Braham, M. Van Droogenbroeck. Simple median-based method for stationary background generation using background subtraction algorithms. *International Conference on Image Analysis and Processing (ICIAP), Workshop on Scene Background Modeling and Initialization (SBMI)*, 9281:477-484, 2015.](http://hdl.handle.net/2268/182893)
 
 [3] A. Sobral. BGSLibrary: An OpenCV C++ Background Subtraction Library. *Workshop de Visao Computacional (WVC)*, 2013.
 
