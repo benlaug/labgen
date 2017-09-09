@@ -18,9 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with LaBGen.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <labgen/TextProperties.hpp>
-
 #include <opencv2/imgproc/imgproc.hpp>
+
+#include <labgen/TextProperties.hpp>
 
 using namespace std;
 using namespace cv;

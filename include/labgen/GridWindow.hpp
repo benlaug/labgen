@@ -69,6 +69,7 @@ namespace ns_labgen {
       int32_t rows;
       int32_t cols;
       Interpolation interpolation;
+      bool k_ratio;
       TextProperties::TextPropertiesPtr title_properties;
       TextCache title_cache;
       cv::Mat buffer;
@@ -95,14 +96,18 @@ namespace ns_labgen {
 
       void put_title(const std::string& title, int32_t row, int32_t col);
 
+      bool are_titles_enabled() const;
+
+      void keep_ratio();
+
+      void ignore_ratio();
+
+      bool is_ratio_respected() const;
+
       const cv::Mat& get_buffer() const;
 
       Interpolation get_interpolation_algorithm() const;
 
       void set_interpolation_algorithm(Interpolation algorithm);
-
-    protected:
-
-      bool are_titles_enabled() const;
   };
 } /* ns_labgen */

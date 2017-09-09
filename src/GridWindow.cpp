@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LaBGen.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include <stdexcept>
 
 #include <boost/lexical_cast.hpp>
@@ -55,6 +56,7 @@ width(width),
 rows(rows),
 cols(cols),
 interpolation(Interpolation::LINEAR),
+k_ratio(false),
 title_properties(titles_properties) {
   if (height <= 0)
     throw logic_error("The height must be larger than 0");
@@ -111,7 +113,7 @@ GridWindow::~GridWindow() {
 }
 
 /******************************************************************************/
-
+#include <iostream>
 void GridWindow::display(const Mat& mat, int32_t index) {
   if ((index < 0) || (index >= rois.size())) {
     throw logic_error(
@@ -121,10 +123,31 @@ void GridWindow::display(const Mat& mat, int32_t index) {
 
   Mat roi = buffer(rois[index]);
 
+  /* Rendering. */
   if ((mat.rows != roi.rows) || (mat.cols != roi.cols)) {
+    /* Adapt roi to keep aspect ratio. */
+    if (k_ratio) {
+      double ratio = min(
+        static_cast<double>(roi.rows) / mat.rows,
+        static_cast<double>(roi.cols) / mat.cols
+      );
+
+      int32_t resize_height = mat.rows * ratio;
+      int32_t resize_width = mat.cols * ratio;
+
+      Rect rect = rois[index];
+      rect.y = rect.y + (rect.height - resize_height) / 2;
+      rect.x = rect.x + (rect.width - resize_width) / 2;
+      rect.height = resize_height;
+      rect.width = resize_width;
+
+      roi = buffer(rect);
+    }
+
+    /* Resize mat directly in roi. */
     if (mat.type() == CV_8UC3)
       resize(mat, roi, Size(roi.cols, roi.rows), 0, 0, interpolation);
-    else {
+    else { // Convert to color.
       Mat resized;
       resize(mat, resized, Size(roi.cols, roi.rows), 0, 0, interpolation);
       cvtColor(resized, roi, CV_GRAY2BGR);
@@ -133,7 +156,7 @@ void GridWindow::display(const Mat& mat, int32_t index) {
   else {
     if (mat.type() == CV_8UC3)
       mat.copyTo(roi);
-    else
+    else // Convert to color.
       cvtColor(mat, roi, CV_GRAY2BGR);
   }
 
@@ -156,17 +179,17 @@ void GridWindow::put_title(const string& title, int32_t index) {
     );
   }
 
-  /* Checking whether the title has already been rendered */
+  /* Checking whether the title has already been rendered. */
   if (title == title_cache[index])
     return;
 
   title_cache[index] = title;
 
-  /* Extracting the appropriate ROI from the buffer */
+  /* Extracting the appropriate ROI from the buffer. */
   Mat title_roi = buffer(title_rois[index]);
   title_roi = title_properties->get_background_color();
 
-  /* Adapting scale to avoid overflows */
+  /* Adapting scale to avoid overflows. */
   double scale = title_properties->get_scale();
 
   while (title_properties->estimate_width(title, scale) >= width) {
@@ -179,7 +202,7 @@ void GridWindow::put_title(const string& title, int32_t index) {
     scale -= ADAPTIVE_SCALE_TERM;
   }
 
-  /* Compute x offset regarding the chosen justification */
+  /* Compute x offset regarding the chosen justification. */
   int32_t x_offset = 0;
 
   switch (title_properties->get_justification()) {
@@ -188,7 +211,7 @@ void GridWindow::put_title(const string& title, int32_t index) {
       break;
 
     case TextProperties::Justification::CENTER:
-      x_offset = (width/2) - (title_properties->estimate_width(title, scale)/2);
+      x_offset = (width - title_properties->estimate_width(title, scale)) / 2;
       break;
 
     case TextProperties::Justification::RIGHT:
@@ -196,7 +219,7 @@ void GridWindow::put_title(const string& title, int32_t index) {
       break;
   }
 
-  /* Rendering */
+  /* Rendering. */
   putText(
     title_roi,
     title,
@@ -220,6 +243,30 @@ void GridWindow::put_title(const string& title, int32_t row, int32_t col) {
 
 /******************************************************************************/
 
+bool GridWindow::are_titles_enabled() const {
+  return title_properties != nullptr;
+}
+
+/******************************************************************************/
+
+void GridWindow::keep_ratio() {
+  k_ratio = true;
+}
+
+/******************************************************************************/
+
+void GridWindow::ignore_ratio() {
+  k_ratio = false;
+}
+
+/******************************************************************************/
+
+bool GridWindow::is_ratio_respected() const {
+  return k_ratio;
+}
+
+/******************************************************************************/
+
 const Mat& GridWindow::get_buffer() const {
   return buffer;
 }
@@ -234,10 +281,4 @@ GridWindow::Interpolation GridWindow::get_interpolation_algorithm() const {
 
 void GridWindow::set_interpolation_algorithm(Interpolation algorithm) {
   interpolation = algorithm;
-}
-
-/******************************************************************************/
-
-bool GridWindow::are_titles_enabled() const {
-  return title_properties != nullptr;
 }

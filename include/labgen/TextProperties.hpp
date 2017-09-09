@@ -38,7 +38,7 @@ namespace ns_labgen {
 
     public:
 
-      /* Fonts */
+      /* Fonts. */
       enum Font {
         FONT_SIMPLEX        = cv::FONT_HERSHEY_SIMPLEX,
         FONT_PLAIN          = cv::FONT_HERSHEY_PLAIN,
@@ -50,7 +50,7 @@ namespace ns_labgen {
         FONT_SCRIPT_COMPLEX = cv::FONT_HERSHEY_SCRIPT_COMPLEX
       };
 
-      /* Line types */
+      /* Line types. */
       enum LineType {
         LINE_FILLED         = cv::FILLED,
         LINE_4_CONNECTED    = cv::LINE_4,
@@ -58,7 +58,7 @@ namespace ns_labgen {
         LINE_ANTI_ALIASED   = cv::LINE_AA
       };
 
-      /* Justification */
+      /* Justification. */
       enum Justification {
         LEFT,
         CENTER,
@@ -80,8 +80,8 @@ namespace ns_labgen {
     public:
 
       TextProperties(
-        Font font = Font::FONT_COMPLEX,
-        double scale = 0.5,
+        Font font = Font::FONT_DUPLEX,
+        double scale = 0.8,
         const cv::Scalar& color = cv::Scalar(0, 0, 0),
         const cv::Scalar& background_color = cv::Scalar(255, 255, 255),
         int32_t thickness = 1,
