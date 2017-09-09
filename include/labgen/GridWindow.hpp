@@ -22,12 +22,16 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <unordered_set>
 #include <string>
+#include <vector>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
+#include "TextProperties.hpp"
 #include "Utils.hpp"
 
 namespace ns_labgen {
@@ -39,15 +43,34 @@ namespace ns_labgen {
     protected:
 
       typedef Utils::ROIs                                                 ROIs;
+      typedef std::vector<std::string>                               TextCache;
+
+    public:
+
+      enum Interpolation {
+        NEAREST = cv::INTER_NEAREST,
+        LINEAR  = cv::INTER_LINEAR,
+        AREA    = cv::INTER_AREA,
+        CUBIC   = cv::INTER_CUBIC,
+        LANCZOS = cv::INTER_LANCZOS4
+      };
+
+    protected:
+
+      static const double ADAPTIVE_SCALE_TERM;
 
     protected:
 
       ROIs rois;
+      ROIs title_rois;
       std::string window_name;
       int32_t height;
       int32_t width;
       int32_t rows;
       int32_t cols;
+      Interpolation interpolation;
+      TextProperties::TextPropertiesPtr title_properties;
+      TextCache title_cache;
       cv::Mat buffer;
       static std::unordered_set<std::string> available_windows;
 
@@ -58,7 +81,8 @@ namespace ns_labgen {
         int32_t height,
         int32_t width,
         int32_t rows = 1,
-        int32_t cols = 1
+        int32_t cols = 1,
+        TextProperties::TextPropertiesPtr title_properties = nullptr
       );
 
       virtual ~GridWindow();
@@ -66,5 +90,19 @@ namespace ns_labgen {
       void display(const cv::Mat& mat, int32_t index = 0);
 
       void display(const cv::Mat& mat, int32_t row, int32_t col);
+
+      void put_title(const std::string& title, int32_t index = 0);
+
+      void put_title(const std::string& title, int32_t row, int32_t col);
+
+      const cv::Mat& get_buffer() const;
+
+      Interpolation get_interpolation_algorithm() const;
+
+      void set_interpolation_algorithm(Interpolation algorithm);
+
+    protected:
+
+      bool are_titles_enabled() const;
   };
 } /* ns_labgen */

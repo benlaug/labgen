@@ -29,6 +29,7 @@
 #include <stdexcept>
 #include <string>
 
+#include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 
 #include <opencv2/core/core.hpp>
@@ -36,9 +37,11 @@
 
 #include <labgen/LaBGen.hpp>
 #include <labgen/GridWindow.hpp>
+#include <labgen/TextProperties.hpp>
 
 using namespace cv;
 using namespace std;
+using namespace boost;
 using namespace boost::program_options;
 using namespace ns_labgen;
 
@@ -52,7 +55,7 @@ int main(int argc, char** argv) {
    ****************************************************************************/
 
   options_description opt_desc(
-    "LaBGen - Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2016\n"
+    "LaBGen - Copyright - Benjamin Laugraud <blaugraud@ulg.ac.be> - 2017\n"
     "http://www.montefiore.ulg.ac.be/~blaugraud\n"
     "http://www.telecom.ulg.ac.be/labgen\n\n"
     "Usage: ./LaBGen-cli [options]"
@@ -106,6 +109,11 @@ int main(int argc, char** argv) {
       "enable visualization"
     )
     (
+      "record,r",
+      value<vector<string>>()->multitoken(),
+      "record visualization window in a video file"
+    )
+    (
       "split-vis,l",
       "split the visualization items in separated windows"
     )
@@ -134,7 +142,7 @@ int main(int argc, char** argv) {
   cout << "===========================================================" << endl;
   cout << "= LaBGen                                                  =" << endl;
   cout << "===========================================================" << endl;
-  cout << "= Copyright - Benjamin Laugraud - 2016                    =" << endl;
+  cout << "= Copyright - Benjamin Laugraud - 2017                    =" << endl;
   cout << "= http://www.montefiore.ulg.ac.be/~blaugraud              =" << endl;
   cout << "= http://www.telecom.ulg.ac.be/labgen                     =" << endl;
   cout << "===========================================================" << endl;
@@ -246,6 +254,54 @@ int main(int argc, char** argv) {
     cerr << endl << endl;
   }
 
+  /* "record" */
+  bool record = vars_map.count("record");
+
+  string record_path = "";
+  int32_t record_height = 0;
+  int32_t record_width = 0;
+
+  if (record) {
+    if (!visualization)
+      throw runtime_error("A record cannot be done without visualization");
+
+    if (split_vis)
+      throw runtime_error("A record cannot be done with split windows");
+
+    vector<string> record_args = vars_map["record"].as<vector<string>>();
+
+    if (record_args.size() != 1 && record_args.size() != 3) {
+      throw runtime_error(
+        "1 or 3 arguments must be given to records: <path_to_video_file> "
+        "[<height>] [<width>]"
+      );
+    }
+
+    record_path = record_args[0];
+
+    if (record_args.size() == 3) {
+      try {
+        record_height = lexical_cast<int32_t>(record_args[1]);
+      }
+      catch (bad_lexical_cast& e) {
+        throw runtime_error("The height of the video file is not an integer");
+      }
+
+      if (record_height < 1)
+        throw runtime_error("The height of the video file must be positive");
+
+      try {
+        record_width = lexical_cast<int32_t>(record_args[2]);
+      }
+      catch (bad_lexical_cast& e) {
+        throw runtime_error("The width of the video file is not an integer");
+      }
+
+      if (record_width < 1)
+        throw runtime_error("The width of the video file must be positive");
+    }
+  }
+
   /* "wait" */
   int32_t wait = vars_map["wait"].as<int32_t>();
 
@@ -273,6 +329,12 @@ int main(int argc, char** argv) {
   cout << " Visualization: "      << visualization << endl;
   if (visualization)
   cout << "     Split vis: "      << split_vis     << endl;
+  if (record)
+  cout << "   Record path: "      << record_path   << endl;
+  if (record_height > 0)
+  cout << " Record height: "      << record_height << endl;
+  if (record_width > 0)
+  cout << "  Record width: "      << record_width  << endl;
   if (visualization)
   cout << "     Wait (ms): "      << wait          << endl;
   cout << endl;
@@ -327,11 +389,34 @@ int main(int argc, char** argv) {
   FramesVec::const_iterator end   = frames.end();
 
   unique_ptr<GridWindow> window;
+  unique_ptr<VideoWriter> record_stream;
 
   if (visualization && !split_vis) {
+    TextProperties::TextPropertiesPtr t_prop = make_shared<TextProperties>();
+
     window = unique_ptr<GridWindow>(
-      new GridWindow("LaBGen", height, width, 1, 3)
+      new GridWindow(
+        "LaBGen",
+        record ? record_height : height,
+        record ? record_width : width,
+        1,
+        3,
+        t_prop
+      )
     );
+
+    if (record) {
+      const Mat& buffer = window->get_buffer();
+
+      record_stream = unique_ptr<VideoWriter>(
+        new VideoWriter(
+          record_path,
+          CV_FOURCC('X','2','6','4'),
+          10,
+          Size(buffer.cols, buffer.rows)
+        )
+      );
+    }
   }
 
   for (int32_t pass = 0, passes = (p_param + 1) / 2; pass < passes; ++pass) {
@@ -364,8 +449,16 @@ int main(int argc, char** argv) {
         }
         else {
           window->display(*it, 0);
+          window->put_title("Input video", 0);
+
           window->display(labgen.get_segmentation_map(), 1);
+          window->put_title("Segmentation map", 1);
+
           window->display(background, 2);
+          window->put_title("Estimated backgroundaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 2);
+
+          if (record)
+            *record_stream << window->get_buffer();
         }
 
         waitKey(wait);
