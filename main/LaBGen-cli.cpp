@@ -149,8 +149,8 @@ int main(int argc, char** argv) {
         "LaBGen",
         (args_h.get_v_height() > 0) ? args_h.get_v_height() : height,
         (args_h.get_v_width() > 0) ? args_h.get_v_width() : width,
-        1,
-        3,
+        2, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 1
+        2, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 3
         title_properties
       )
     );
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
       record_stream = unique_ptr<VideoWriter>(
         new VideoWriter(
           args_h.get_record_path(),
-          CV_FOURCC('X','2','6','4'),
+          CV_FOURCC('M','J','P','G'),
           args_h.get_record_fps(),
           Size(buffer.cols, buffer.rows)
         )
@@ -202,17 +202,17 @@ int main(int argc, char** argv) {
         if (args_h.get_split_vis()) {
           imshow("Input video", *it);
           imshow("Segmentation map", labgen.get_segmentation_map());
-          imshow("Background estimated by LaBGen", background);
+          imshow("LaBGen", background);
         }
         else {
           window->display(*it, 0);
           window->put_title("Input video", 0);
 
-          window->display(labgen.get_segmentation_map(), 1);
-          window->put_title("Segmentation map", 1);
+          window->display(labgen.get_segmentation_map(), 2); //////////////////////////////////////////////// 1
+          window->put_title("Segmentation map", 2); //////////////////////////////////////////////// 1
 
-          window->display(background, 2);
-          window->put_title("Background estimated by LaBGen", 2);
+          window->display(background, 1); //////////////////////////////////////////////// 2
+          window->put_title("Background estimated by LaBGen", 1); //////////////////////////////////////////////// LaBGen 2
 
           if (!args_h.get_record_path().empty())
             *record_stream << window->get_buffer();
@@ -256,8 +256,11 @@ int main(int argc, char** argv) {
   /* Cleaning. */
   if (args_h.get_visualization()) {
     cout << endl << "Press any key to quit..." << endl;
-    waitKey(0);
+    //waitKey(0); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     destroyAllWindows();
+
+    if (!args_h.get_record_path().empty())
+      record_stream->release();
   }
 
   /* Bye. */

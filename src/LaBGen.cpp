@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <stdexcept>
 
+#include <opencv2/imgproc/imgproc.hpp>
+
 #include <labgen/BGSFactory.hpp>
 #include <labgen/LaBGen.hpp>
 #include <labgen/Utils.hpp>
@@ -65,6 +67,9 @@ void LaBGen::insert(const Mat& current_frame) {
     first_frame = false;
     return;
   }
+
+  if (segmentation_map.channels() != 1)
+    cvtColor(segmentation_map, segmentation_map, CV_BGR2GRAY);
 
   /* Insert the current frame along with the segmentation map into the
    * history.

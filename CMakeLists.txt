@@ -38,6 +38,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 # OpenCV
 find_package(OpenCV REQUIRED core highgui video imgproc features2d)
 include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
+add_definitions(-DOPENCV_VERSION=${OpenCV_VERSION_MAJOR})
 
 # BGSLibrary
 add_subdirectory(bgslibrary)

@@ -52,10 +52,17 @@ namespace ns_labgen {
 
       /* Line types. */
       enum LineType {
+#if OPENCV_VERSION == 2
+        LINE_FILLED         = -1,
+        LINE_4_CONNECTED    =  4,
+        LINE_8_CONNECTED    =  8,
+        LINE_ANTI_ALIASED   = 16
+#else
         LINE_FILLED         = cv::FILLED,
         LINE_4_CONNECTED    = cv::LINE_4,
         LINE_8_CONNECTED    = cv::LINE_8,
         LINE_ANTI_ALIASED   = cv::LINE_AA
+#endif
       };
 
       /* Justification. */

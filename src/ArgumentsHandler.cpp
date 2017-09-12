@@ -487,7 +487,7 @@ void ArgumentsHandler::parse_keep_ratio() {
 
 void ArgumentsHandler::parse_record() {
   record_path = "";
-  record_fps = 10;
+  record_fps = 15;
 
   if (vars_map.count("record")) {
     if (!visualization) {

@@ -144,6 +144,11 @@ void GridWindow::display(const Mat& mat, int32_t index) {
       roi = buffer(rect);
     }
 
+    if (index == 2) { //////////////////////////////////////////////////////////////////////////////////////
+      Rect r = rois[2];
+      r.x = r.x + r.width / 2;
+      roi = buffer(r);
+    }
     /* Resize mat directly in roi. */
     if (mat.type() == CV_8UC3)
       resize(mat, roi, Size(roi.cols, roi.rows), 0, 0, interpolation);
@@ -187,6 +192,11 @@ void GridWindow::put_title(const string& title, int32_t index) {
 
   /* Extracting the appropriate ROI from the buffer. */
   Mat title_roi = buffer(title_rois[index]);
+  if (index == 2) { //////////////////////////////////////////////////////////////////////////////////////
+    Rect r = title_rois[2];
+    r.x = r.x + r.width / 2;
+    title_roi = buffer(r);
+  }
   title_roi = title_properties->get_background_color();
 
   /* Adapting scale to avoid overflows. */
