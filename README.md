@@ -13,6 +13,10 @@ Our method won an award and has been ranked first during the [IEEE Scene Backgro
 
 ![Award](.readme/award.jpg)
 
+Here is a video showing some backgrounds estimated by LaBGen (click on the image below to play it):
+
+[![Demonstration of LaBGen](https://img.youtube.com/vi/rYhX8ZizSL0/0.jpg)](https://www.youtube.com/watch?v=rYhX8ZizSL0 "Click to play")
+
 ## Compiling the program
 
 The program implementing the method has been developed in C++11 and is distributed under the [GPLv3](LICENSE) license. In order to compile it, you need a modern C++ compiler, a copy of the [Boost](http://www.boost.org) library, a copy of the [OpenCV](http://opencv.org) library, and the [CMake](https://cmake.org) build automation tool. On UNIX-like environments, the program can be compiled as follows, considering that your terminal is in the source code directory:

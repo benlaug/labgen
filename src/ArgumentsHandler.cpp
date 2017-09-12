@@ -72,10 +72,10 @@ void ArgumentsHandler::parse_vars_map() {
   parse_p_param();
   parse_visualization();
   parse_split_vis();
+  parse_record();
   parse_v_height();
   parse_v_width();
   parse_keep_ratio();
-  parse_record();
   parse_wait();
 }
 
@@ -129,6 +129,24 @@ bool ArgumentsHandler::get_split_vis() const {
 
 /******************************************************************************/
 
+bool ArgumentsHandler::get_record() const {
+  return record;
+}
+
+/******************************************************************************/
+
+const string& ArgumentsHandler::get_record_path() const {
+  return record_path;
+}
+
+/******************************************************************************/
+
+int32_t ArgumentsHandler::get_record_fps() const {
+  return record_fps;
+}
+
+/******************************************************************************/
+
 int32_t ArgumentsHandler::get_v_height() const {
   return v_height;
 }
@@ -143,18 +161,6 @@ int32_t ArgumentsHandler::get_v_width() const {
 
 bool ArgumentsHandler::get_keep_ratio() const {
   return keep_ratio;
-}
-
-/******************************************************************************/
-
-const string& ArgumentsHandler::get_record_path() const {
-  return record_path;
-}
-
-/******************************************************************************/
-
-int32_t ArgumentsHandler::get_record_fps() const {
-  return record_fps;
 }
 
 /******************************************************************************/
@@ -184,7 +190,8 @@ void ArgumentsHandler::print_parameters(ostream& os) const {
   os << "        Vis width: "      << v_width       << endl;
   if (visualization)
   os << "Keep aspect ratio: "      << keep_ratio    << endl;
-  if (!record_path.empty()) {
+  os << "           Record: "      << record        << endl;
+  if (record) {
   os << "      Record path: "      << record_path   << endl;
   os << "       Record fps: "      << record_fps    << endl;
   }
@@ -403,100 +410,25 @@ void ArgumentsHandler::parse_split_vis() {
   if (split_vis && !visualization) {
     cerr << "/!\\ The split-vis option without visualization will be ignored!";
     cerr << endl << endl;
-  }
-}
 
-/******************************************************************************/
-
-void ArgumentsHandler::parse_v_height() {
-  v_height = 0;
-
-  if (vars_map.count("height")) {
-    if (!visualization) {
-      cerr << "/!\\ The height option without visualization will be ignored!";
-      cerr << endl << endl;
-    }
-    else if (split_vis) {
-      cerr << "/!\\ The height option with split windows will be ignored!";
-      cerr << endl << endl;
-    }
-    else {
-      v_height = vars_map["height"].as<int32_t>();
-
-      if (v_height < 1)
-        throw logic_error("The height parameter must be positive!");
-    }
-  }
-}
-
-/******************************************************************************/
-
-void ArgumentsHandler::parse_v_width() {
-  v_width = 0;
-
-  if (vars_map.count("width")) {
-    if (!visualization) {
-      cerr << "/!\\ The width option without visualization will be ignored!";
-      cerr << endl << endl;
-    }
-    else if (split_vis) {
-      cerr << "/!\\ The width option with split windows will be ignored!";
-      cerr << endl << endl;
-    }
-    else {
-      v_width = vars_map["width"].as<int32_t>();
-
-      if (v_width < 1)
-        throw logic_error("The width parameter must be positive!");
-    }
-  }
-}
-
-/******************************************************************************/
-
-void ArgumentsHandler::parse_keep_ratio() {
-  keep_ratio = vars_map.count("keep-ratio");
-
-  if (keep_ratio) {
-    if (!visualization) {
-      cerr << "/!\\ The keep-ratio option without visualization will be ";
-      cerr << "ignored!";
-      cerr << endl << endl;
-
-      keep_ratio = false;
-    }
-
-    if (split_vis) {
-      cerr << "/!\\ The keep-ratio option with split windows will be ignored!";
-      cerr << endl << endl;
-
-      keep_ratio = false;
-    }
-
-    if ((v_height < 1) || (v_width < 1)) {
-      cerr << "/!\\ The keep-ratio option with no height or width defined ";
-      cerr << "will be ignored!";
-      cerr << endl << endl;
-
-      keep_ratio = false;
-    }
+    split_vis = false;
   }
 }
 
 /******************************************************************************/
 
 void ArgumentsHandler::parse_record() {
+  record = vars_map.count("record");
+
   record_path = "";
   record_fps = 15;
 
-  if (vars_map.count("record")) {
-    if (!visualization) {
-      cerr << "/!\\ The record option without visualization will be ignored!";
-      cerr << endl << endl;
-    }
-    else if (split_vis) {
+  if (record) {
+    if (split_vis) {
       cerr << "/!\\ The record option with split windows will be ignored!";
       cerr << endl << endl;
+
+      record = false;
     }
     else {
       vector<string> record_args = vars_map["record"].as<vector<string>>();
@@ -528,6 +460,83 @@ void ArgumentsHandler::parse_record() {
           );
         }
       }
+    }
+  }
+}
+
+/******************************************************************************/
+
+void ArgumentsHandler::parse_v_height() {
+  v_height = 0;
+
+  if (vars_map.count("height")) {
+    if (!visualization && !record) {
+      cerr << "/!\\ The height option without visualization or record will be ";
+      cerr << "ignored!";
+      cerr << endl << endl;
+    }
+    else if (split_vis) {
+      cerr << "/!\\ The height option with split windows will be ignored!";
+      cerr << endl << endl;
+    }
+    else {
+      v_height = vars_map["height"].as<int32_t>();
+
+      if (v_height < 1)
+        throw logic_error("The height parameter must be positive!");
+    }
+  }
+}
+
+/******************************************************************************/
+
+void ArgumentsHandler::parse_v_width() {
+  v_width = 0;
+
+  if (vars_map.count("width")) {
+    if (!visualization && !record) {
+      cerr << "/!\\ The width option without visualization or record will be ";
+      cerr << "ignored!";
+      cerr << endl << endl;
+    }
+    else if (split_vis) {
+      cerr << "/!\\ The width option with split windows will be ignored!";
+      cerr << endl << endl;
+    }
+    else {
+      v_width = vars_map["width"].as<int32_t>();
+
+      if (v_width < 1)
+        throw logic_error("The width parameter must be positive!");
+    }
+  }
+}
+
+/******************************************************************************/
+
+void ArgumentsHandler::parse_keep_ratio() {
+  keep_ratio = vars_map.count("keep-ratio");
+
+  if (keep_ratio) {
+    if (!visualization && !record) {
+      cerr << "/!\\ The keep-ratio option without visualization or record ";
+      cerr << "will be ignored!";
+      cerr << endl << endl;
+
+      keep_ratio = false;
+    }
+    else if (split_vis) {
+      cerr << "/!\\ The keep-ratio option with split windows will be ignored!";
+      cerr << endl << endl;
+
+      keep_ratio = false;
+    }
+    else if ((v_height < 1) || (v_width < 1)) {
+      cerr << "/!\\ The keep-ratio option with no height or width defined ";
+      cerr << "will be ignored!";
+      cerr << endl << endl;
+
+      keep_ratio = false;
     }
   }
 }

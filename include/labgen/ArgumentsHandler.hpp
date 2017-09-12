@@ -47,11 +47,12 @@ namespace ns_labgen {
       int32_t p_param;
       bool visualization;
       bool split_vis;
+      bool record;
+      std::string record_path;
+      int32_t record_fps;
       int32_t v_height;
       int32_t v_width;
       bool keep_ratio;
-      std::string record_path;
-      int32_t record_fps;
       int32_t wait;
 
     public:
@@ -80,15 +81,17 @@ namespace ns_labgen {
 
       bool get_split_vis() const;
 
+      bool get_record() const;
+
+      const std::string& get_record_path() const;
+
+      int32_t get_record_fps() const;
+
       int32_t get_v_height() const;
 
       int32_t get_v_width() const;
 
       bool get_keep_ratio() const;
-
-      const std::string& get_record_path() const;
-
-      int32_t get_record_fps() const;
 
       int32_t get_wait() const;
 
@@ -120,13 +123,13 @@ namespace ns_labgen {
 
       void parse_split_vis();
 
+      void parse_record();
+
       void parse_v_height();
 
       void parse_v_width();
 
       void parse_keep_ratio();
-
-      void parse_record();
 
       void parse_wait();
   };

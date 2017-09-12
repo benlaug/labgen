@@ -96,6 +96,8 @@ namespace ns_labgen {
 
       void put_title(const std::string& title, int32_t row, int32_t col);
 
+      void refresh();
+
       bool are_titles_enabled() const;
 
       void keep_ratio();

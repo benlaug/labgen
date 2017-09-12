@@ -87,8 +87,8 @@ namespace ns_labgen {
     public:
 
       TextProperties(
-        Font font = Font::FONT_DUPLEX,
-        double scale = 0.8,
+        Font font = Font::FONT_SIMPLEX,
+        double scale = 0.4,
         const cv::Scalar& color = cv::Scalar(0, 0, 0),
         const cv::Scalar& background_color = cv::Scalar(255, 255, 255),
         int32_t thickness = 1,

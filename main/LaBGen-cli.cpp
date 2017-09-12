@@ -111,6 +111,57 @@ int main(int argc, char** argv) {
   cout << frames.size() << " frames read." << endl << endl;
 
   /****************************************************************************
+   * Initialization of graphical components and video streams.                *
+   ****************************************************************************/
+
+  unique_ptr<GridWindow> window;
+  unique_ptr<VideoWriter> record_stream;
+
+  if (
+    (args_h.get_visualization() && !args_h.get_split_vis()) ||
+     args_h.get_record()
+   ) {
+    TextProperties::TextPropertiesPtr title_properties = nullptr;
+      make_shared<TextProperties>();
+
+    if (args_h.get_record()) {
+      title_properties = make_shared<TextProperties>(
+        TextProperties::Font::FONT_DUPLEX,
+        0.8
+      );
+    }
+    else
+      title_properties = make_shared<TextProperties>();
+
+    window = unique_ptr<GridWindow>(
+      new GridWindow(
+        "LaBGen",
+        (args_h.get_v_height() > 0) ? args_h.get_v_height() : height,
+        (args_h.get_v_width() > 0) ? args_h.get_v_width() : width,
+        1,
+        3,
+        title_properties
+      )
+    );
+
+    if (args_h.get_keep_ratio())
+      window->keep_ratio();
+
+    if (args_h.get_record()) {
+      const Mat& buffer = window->get_buffer();
+
+      record_stream = unique_ptr<VideoWriter>(
+        new VideoWriter(
+          args_h.get_record_path(),
+          CV_FOURCC('M','J','P','G'),
+          args_h.get_record_fps(),
+          Size(buffer.cols, buffer.rows)
+        )
+      );
+    }
+  }
+
+  /****************************************************************************
    * Processing.                                                              *
    ****************************************************************************/
 
@@ -119,7 +170,7 @@ int main(int argc, char** argv) {
   /* Initialization of the background matrix. */
   Mat background = Mat(height, width, CV_8UC3);
 
-  /* Initialization of the LaBGen-P algorithm. */
+  /* Initialization of the LaBGen algorithm. */
   LaBGen labgen(
     height,
     width,
@@ -136,41 +187,6 @@ int main(int argc, char** argv) {
   FramesVec::const_iterator begin = frames.begin();
   FramesVec::const_iterator it    = begin;
   FramesVec::const_iterator end   = frames.end();
-
-  unique_ptr<GridWindow> window;
-  unique_ptr<VideoWriter> record_stream;
-
-  if (args_h.get_visualization() && !args_h.get_split_vis()) {
-    TextProperties::TextPropertiesPtr title_properties =
-      make_shared<TextProperties>();
-
-    window = unique_ptr<GridWindow>(
-      new GridWindow(
-        "LaBGen",
-        (args_h.get_v_height() > 0) ? args_h.get_v_height() : height,
-        (args_h.get_v_width() > 0) ? args_h.get_v_width() : width,
-        2, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 1
-        2, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 3
-        title_properties
-      )
-    );
-
-    if (args_h.get_keep_ratio())
-      window->keep_ratio();
-
-    if (!args_h.get_record_path().empty()) {
-      const Mat& buffer = window->get_buffer();
-
-      record_stream = unique_ptr<VideoWriter>(
-        new VideoWriter(
-          args_h.get_record_path(),
-          CV_FOURCC('M','J','P','G'),
-          args_h.get_record_fps(),
-          Size(buffer.cols, buffer.rows)
-        )
-      );
-    }
-  }
 
   for (
     int32_t pass = 0, passes = (args_h.get_p_param() + 1) / 2;
@@ -196,7 +212,7 @@ int main(int argc, char** argv) {
       }
 
       /* Visualization. */
-      if (args_h.get_visualization()) {
+      if (args_h.get_visualization() || args_h.get_record()) {
         labgen.generate_background(background);
 
         if (args_h.get_split_vis()) {
@@ -208,17 +224,21 @@ int main(int argc, char** argv) {
           window->display(*it, 0);
           window->put_title("Input video", 0);
 
-          window->display(labgen.get_segmentation_map(), 2); //////////////////////////////////////////////// 1
-          window->put_title("Segmentation map", 2); //////////////////////////////////////////////// 1
+          window->display(labgen.get_segmentation_map(), 1);
+          window->put_title("Segmentation map", 1);
 
-          window->display(background, 1); //////////////////////////////////////////////// 2
-          window->put_title("Background estimated by LaBGen", 1); //////////////////////////////////////////////// LaBGen 2
+          window->display(background, 2);
+          window->put_title("LaBGen", 2);
 
-          if (!args_h.get_record_path().empty())
+          if (args_h.get_visualization())
+            window->refresh();
+
+          if (args_h.get_record())
             *record_stream << window->get_buffer();
         }
 
-        waitKey(args_h.get_wait());
+        if (args_h.get_visualization())
+          waitKey(args_h.get_wait());
       }
 
       /* Move iterator. */
@@ -255,11 +275,11 @@ int main(int argc, char** argv) {
 
   /* Cleaning. */
   if (args_h.get_visualization()) {
-    cout << endl << "Press any key to quit..." << endl;
-    //waitKey(0); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    cout << endl << "Press any key in a graphical window to quit..." << endl;
+    waitKey(0);
     destroyAllWindows();
 
-    if (!args_h.get_record_path().empty())
+    if (args_h.get_record())
       record_stream->release();
   }
 
