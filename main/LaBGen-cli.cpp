@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 
   if (!decoder.isOpened()) {
     throw runtime_error(
-      "Cannot open the '" + args_h.get_input() + "' sequence"
+      "Cannot open the '" + args_h.get_input() + "' sequence."
     );
   }
 
@@ -122,7 +122,6 @@ int main(int argc, char** argv) {
      args_h.get_record()
    ) {
     TextProperties::TextPropertiesPtr title_properties = nullptr;
-      make_shared<TextProperties>();
 
     if (args_h.get_record()) {
       title_properties = make_shared<TextProperties>(

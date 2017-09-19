@@ -68,6 +68,7 @@ void LaBGen::insert(const Mat& current_frame) {
     return;
   }
 
+  /* Ensure that the segmentation map has 1 channel. */
   if (segmentation_map.channels() != 1)
     cvtColor(segmentation_map, segmentation_map, CV_BGR2GRAY);
 
